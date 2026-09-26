@@ -159,7 +159,12 @@ const server = http.createServer(async (req, res) => {
       const input = await body(req);
       const runId = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
       const runDir = path.join(ROOT, runId);
-      const video = await recordWorkflow({ url: input.url, workflow: input.workflow || [{ action: "goto", url: input.url }], runDir });
+      const video = await recordWorkflow({
+        url: input.url,
+        workflow: input.workflow || [{ action: "goto", url: input.url }],
+        runDir,
+        pacing: input.pacing || "standard"
+      });
       let mp4 = null;
       let renderError = null;
       if (video) {

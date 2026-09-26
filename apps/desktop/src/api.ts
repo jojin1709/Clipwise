@@ -19,11 +19,11 @@ export async function analyze(url: string, style: string, aspectRatio: string) {
   return data as { runId: string; result: { pages: unknown[] }; features: Feature[]; plan: unknown };
 }
 
-export async function record(url: string, workflow: unknown[]) {
+export async function record(url: string, workflow: unknown[], pacing: "quick" | "standard" | "deep" = "standard") {
   const r = await fetch(`${API}/api/record`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ url, workflow })
+    body: JSON.stringify({ url, workflow, pacing })
   });
   const data = await r.json();
   if (!r.ok) throw new Error(data.error || "Recording failed");

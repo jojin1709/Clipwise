@@ -1,105 +1,106 @@
+function cleanTitle(title, url) {
+  if (!title) {
+    const path = new URL(url).pathname.replace(/^\/|\/$/g, "");
+    if (!path) return "Homepage & Overview";
+    return path.replace(/[-_]/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  }
+  return title.split(/[-|•–]/)[0].trim();
+}
+
 export function discoverFeatures(result) {
   const features = [];
   const add = (feature) => {
     if (!features.some(f => f.id === feature.id)) features.push(feature);
   };
 
-  for (const page of result.pages) {
-    const text = `${page.title} ${page.headings.join(" ")} ${page.buttons.join(" ")} ${page.bodyText || ""}`.toLowerCase();
+  const pages = result.pages || [];
 
-    if (page.inputs.some(i => ["search", "query"].some(k => `${i.name} ${i.placeholder}`.toLowerCase().includes(k))) ||
-        /\bsearch\b/.test(text)) {
+  // 1. Generate a dedicated Tour Section for every explored page
+  pages.forEach((page, idx) => {
+    const title = cleanTitle(page.title, page.url);
+    const slug = new URL(page.url).pathname.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "") || "home";
+    const headingsList = (page.headings || []).slice(0, 3).join(" • ");
+    const isHome = idx === 0 || page.url === result.startUrl;
+
+    const workflow = [
+      {
+        action: "banner",
+        title: title,
+        subtitle: isHome ? "Main Overview & Highlights" : (headingsList || "Explore Tools & Features")
+      },
+      { action: "goto", url: page.url },
+      { action: "wait", ms: 3000 },
+      { action: "smoothScroll", amount: 650, duration: 2800 },
+      { action: "wait", ms: 2200 },
+      { action: "smoothScroll", amount: 800, duration: 3200 },
+      { action: "wait", ms: 2500 },
+      { action: "smoothScroll", amount: -500, duration: 2500 },
+      { action: "wait", ms: 1800 }
+    ];
+
+    add({
+      id: `section-${idx + 1}-${slug}`,
+      name: `${isHome ? "🏠 " : "📂 "}${title}`,
+      description: headingsList ? `Section content: ${headingsList}` : `Exploration of ${page.url}`,
+      importance: isHome ? "high" : "medium",
+      confidence: 0.96,
+      sourcePage: page.url,
+      evidence: [
+        `${(page.headings || []).length} headings`,
+        `${(page.buttons || []).length} interactive buttons`,
+        `${(page.links || []).length} internal links`
+      ],
+      workflow
+    });
+  });
+
+  // 2. Search Capability Discovery
+  for (const page of pages) {
+    const text = `${page.title} ${(page.headings || []).join(" ")} ${(page.buttons || []).join(" ")}`.toLowerCase();
+    const hasSearchInput = (page.inputs || []).some(i =>
+      ["search", "query", "q"].some(k => `${i.name} ${i.placeholder}`.toLowerCase().includes(k))
+    );
+
+    if (hasSearchInput || /\bsearch\b/.test(text)) {
       add({
-        id: "search",
-        name: "Search",
-        description: "Search functionality detected on the site.",
+        id: "search-capability",
+        name: "🔍 Search & Discovery",
+        description: "Interactive search filters and catalog lookup.",
         importance: "high",
-        confidence: 0.86,
+        confidence: 0.89,
         sourcePage: page.url,
-        evidence: ["Search text or search input detected."],
+        evidence: ["Search inputs or search keywords detected."],
         workflow: [
+          { action: "banner", title: "Search & Discovery", subtitle: "Instant catalog and tool lookup" },
           { action: "goto", url: page.url },
-          { action: "wait", ms: 500 }
+          { action: "wait", ms: 2500 },
+          { action: "smoothScroll", amount: 400, duration: 2000 },
+          { action: "wait", ms: 2000 }
         ]
       });
-    }
-
-    if (page.inputs.length > 0 || /\b(filter|sort|category)\b/.test(text)) {
-      add({
-        id: "forms-filters",
-        name: "Forms & Filters",
-        description: "Interactive inputs, filters, or selection controls were detected.",
-        importance: "medium",
-        confidence: 0.78,
-        sourcePage: page.url,
-        evidence: [`${page.inputs.length} input/control fields detected.`],
-        workflow: [{ action: "goto", url: page.url }]
-      });
-    }
-
-    if (page.links.length >= 3) {
-      add({
-        id: "navigation",
-        name: "Navigation",
-        description: "Multiple internal navigation paths were detected.",
-        importance: "medium",
-        confidence: 0.82,
-        sourcePage: page.url,
-        evidence: [`${page.links.length} links detected.`],
-        workflow: [{ action: "goto", url: page.url }]
-      });
-    }
-
-    if (/\b(upload|attach|choose file|drop file)\b/.test(text)) {
-      add({
-        id: "upload",
-        name: "Upload",
-        description: "A file-upload capability appears to be available.",
-        importance: "high",
-        confidence: 0.79,
-        sourcePage: page.url,
-        evidence: ["Upload-related text detected."],
-        workflow: [{ action: "goto", url: page.url }]
-      });
-    }
-
-    if (/\b(dashboard|overview|analytics|statistics|stats)\b/.test(text)) {
-      add({
-        id: "dashboard",
-        name: "Dashboard / Analytics",
-        description: "Dashboard or analytics content was detected.",
-        importance: "high",
-        confidence: 0.81,
-        sourcePage: page.url,
-        evidence: ["Dashboard/analytics terminology detected."],
-        workflow: [{ action: "goto", url: page.url }]
-      });
-    }
-
-    if (/\b(login|sign in|log in|create account|sign up)\b/.test(text)) {
-      add({
-        id: "authentication",
-        name: "Authentication",
-        description: "Authentication UI was detected. Clipwise will not bypass or submit it automatically.",
-        importance: "low",
-        confidence: 0.92,
-        sourcePage: page.url,
-        evidence: ["Authentication terminology detected."],
-        workflow: [{ action: "goto", url: page.url }]
-      });
+      break;
     }
   }
 
+  // Fallback if no pages were extracted
   if (!features.length) {
     add({
-      id: "homepage",
-      name: "Homepage",
-      description: "The main website page and its visible content.",
+      id: "homepage-overview",
+      name: "🏠 Homepage Tour",
+      description: "Full tour of the main landing page and its features.",
       importance: "high",
-      confidence: 0.9,
+      confidence: 0.95,
       sourcePage: result.startUrl,
-      evidence: ["Default homepage feature."],
-      workflow: [{ action: "goto", url: result.startUrl }]
+      evidence: ["Primary entrypoint."],
+      workflow: [
+        { action: "banner", title: "Product Overview", subtitle: "Welcome Tour" },
+        { action: "goto", url: result.startUrl },
+        { action: "wait", ms: 3000 },
+        { action: "smoothScroll", amount: 700, duration: 3000 },
+        { action: "wait", ms: 2500 },
+        { action: "smoothScroll", amount: 900, duration: 3500 },
+        { action: "wait", ms: 2500 }
+      ]
     });
   }
 

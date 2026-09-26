@@ -15,4 +15,11 @@
 .page-info{padding:10px}
 .page-info strong{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .page-info span{display:block;font-size:10px;color:#6b7e94;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.pacing-container{margin-bottom:18px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px;background:#091422;border:1px solid #1a2a3d;padding:12px 18px;border-radius:12px}
+.pacing-left{display:flex;align-items:center;gap:12px}
+.pacing-label{font-size:12px;color:#859bb5;font-weight:600}
+.batch-actions{display:flex;align-items:center;gap:10px}
+.text-btn{background:transparent;border:1px solid #1f334a;color:#79a8e0;font-size:11px;padding:6px 11px;border-radius:7px;transition:0.15s}
+.text-btn:hover{background:#112740;color:#fff;border-color:#2a5078}
+.est-badge{font-size:12px;color:#38bdf8;background:#0c253d;border:1px solid #1d466b;padding:5px 12px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
 

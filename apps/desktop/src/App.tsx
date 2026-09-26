@@ -34,9 +34,9 @@ function App() {
       setService("online");
       const data = await analyze(state.url, state.style, state.aspectRatio);
       state.set({
-        status: `Analysis complete — ${data.features.length} features discovered`,
+        status: `Analysis complete — ${data.features.length} sections and features discovered`,
         features: data.features,
-        selected: data.features.filter(f => f.importance === "high").map(f => f.id),
+        selected: data.features.map(f => f.id),
         runId: data.runId,
         plan: data.plan,
         pages: (data.result?.pages as unknown[]) || []
@@ -53,12 +53,12 @@ function App() {
 
   async function createRecording() {
     const chosen = state.features.filter(f => state.selected.includes(f.id));
-    if (!chosen.length) return setMessage("Select at least one feature.");
+    if (!chosen.length) return setMessage("Select at least one feature or section to record.");
     setBusy(true);
-    state.set({ status: "Recording selected workflows..." });
+    state.set({ status: `Recording ${chosen.length} sections (${state.pacing} mode)...` });
     try {
       const actions = chosen.flatMap(f => f.workflow);
-      const data = await record(state.url, actions);
+      const data = await record(state.url, actions, state.pacing);
       state.set({
         status: data.mp4 ? "Showcase MP4 rendered" : (data.renderError || "Recording completed"),
         videoPath: data.mp4 || data.video,
@@ -201,17 +201,47 @@ function NewProject({ onGenerate, busy }: { onGenerate: () => void; busy: boolea
 
 function FeatureView({ onRecord, busy }: { onRecord: () => void; busy: boolean }) {
   const s = useStore();
+  const perSectionSec = s.pacing === "deep" ? 75 : s.pacing === "quick" ? 14 : 32;
+  const totalEstSec = s.selected.length * perSectionSec;
+  const estMin = Math.floor(totalEstSec / 60);
+  const estSec = totalEstSec % 60;
+  const estString = estMin > 0 ? `${estMin}m ${estSec > 0 ? `${estSec}s` : ""}` : `${estSec}s`;
+
   return (
     <section>
       <div className="section-title">
         <div>
-          <span className="eyebrow">DISCOVERY</span>
-          <h2>Discovered features</h2>
-          <p>{s.features.length} capabilities found on <b>{s.url}</b></p>
+          <span className="eyebrow">DISCOVERY & SECTIONS</span>
+          <h2>Discovered Website Sections ({s.features.length})</h2>
+          <p>{s.selected.length} of {s.features.length} sections selected for video on <b>{s.url}</b></p>
         </div>
-        <button className="primary" disabled={busy || !s.features.length} onClick={onRecord}>
-          <Video size={18}/>Record Showcase
+        <button className="primary" disabled={busy || !s.selected.length} onClick={onRecord}>
+          <Video size={18}/>{busy ? "Recording Showcase..." : `Record Showcase (~${estString})`}
         </button>
+      </div>
+
+      <div className="pacing-container">
+        <div className="pacing-left">
+          <span className="pacing-label">Walkthrough Depth:</span>
+          <div className="segmented">
+            <button className={s.pacing === "quick" ? "selected" : ""} onClick={() => s.set({ pacing: "quick" })}>
+              ⚡ Quick Teaser (~1–2m)
+            </button>
+            <button className={s.pacing === "standard" ? "selected" : ""} onClick={() => s.set({ pacing: "standard" })}>
+              🎬 Standard Tour (~3–5m)
+            </button>
+            <button className={s.pacing === "deep" ? "selected" : ""} onClick={() => s.set({ pacing: "deep" })}>
+              🏆 Deep Walkthrough (~10–20m)
+            </button>
+          </div>
+        </div>
+        <div className="batch-actions">
+          <button className="text-btn" onClick={s.selectAll}>Select All ({s.features.length})</button>
+          <button className="text-btn" onClick={s.deselectAll}>Deselect All</button>
+          <span className="est-badge">
+            ⏱️ Est. Length: ~{estString} ({s.selected.length} sections)
+          </span>
+        </div>
       </div>
       <div className="feature-grid">
         {s.features.map((f, i) => (

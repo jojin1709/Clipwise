@@ -115,10 +115,7 @@ jobs:
           tag_name: ${{ steps.prepare_assets.outputs.tag }}
           name: ${{ steps.prepare_assets.outputs.title }}
           target_commitish: ${{ github.sha }}
-          files: |
-            dist-release/*.exe
-            dist-release/*.msi
-            dist-release/SHA256SUMS.txt
+          files: dist-release/*
           generate_release_notes: true
           draft: false
           prerelease: false

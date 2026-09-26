@@ -2,12 +2,14 @@ import { create } from "zustand";
 import type { Feature } from "@clipwise/shared";
 
 type Style = "startup" | "github" | "portfolio" | "tutorial" | "launch" | "social";
+export type Pacing = "quick" | "standard" | "deep";
 
 interface State {
   url: string;
   projectName: string;
   style: Style;
   aspectRatio: "16:9" | "9:16" | "1:1";
+  pacing: Pacing;
   status: string;
   features: Feature[];
   selected: string[];
@@ -18,6 +20,8 @@ interface State {
   pages: unknown[];
   set: (patch: Partial<State>) => void;
   toggleFeature: (id: string) => void;
+  selectAll: () => void;
+  deselectAll: () => void;
 }
 
 export const useStore = create<State>((set) => ({
@@ -25,6 +29,7 @@ export const useStore = create<State>((set) => ({
   projectName: "",
   style: "startup",
   aspectRatio: "16:9",
+  pacing: "standard",
   status: "Ready",
   features: [],
   selected: [],
@@ -36,5 +41,9 @@ export const useStore = create<State>((set) => ({
   set: (patch) => set(patch),
   toggleFeature: (id) => set((state) => ({
     selected: state.selected.includes(id) ? state.selected.filter(x => x !== id) : [...state.selected, id]
-  }))
+  })),
+  selectAll: () => set((state) => ({
+    selected: state.features.map(f => f.id)
+  })),
+  deselectAll: () => set({ selected: [] })
 }));
