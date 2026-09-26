@@ -1,3 +1,3 @@
 fn main() {
-    showcaseai_lib::run();
+    clipwise_lib::run();
 }
