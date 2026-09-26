@@ -29,7 +29,7 @@
 
 <br/>
 
-**Developed by [JOJIN JOHN](https://github.com/jojin1709)**
+**Developed by [JOJIN JOHN](https://github.com/jojin1709)** &nbsp;•&nbsp; [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jojin-john/)
 
 <br/>
 
@@ -230,6 +230,7 @@ If you find Clipwise useful for your workflow, indie projects, or enterprise dem
 
 **JOJIN JOHN**
 - GitHub: [@jojin1709](https://github.com/jojin1709)
+- LinkedIn: [linkedin.com/in/jojin-john](https://www.linkedin.com/in/jojin-john/)
 - Repository: [github.com/jojin1709/Clipwise](https://github.com/jojin1709/Clipwise)
 
 ---
