@@ -1250,62 +1250,88 @@ a {
   box-shadow: 0 14px 35px rgba(0, 0, 0, 0.55), 0 0 20px rgba(99, 102, 241, 0.15);
 }
 
+.review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.review-platform {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.review-platform svg {
+  color: #a5b4fc;
+}
+
+.review-time {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
 .review-stars {
   display: flex;
-  gap: 4px;
+  gap: 3px;
   color: #eab308;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .review-quote {
-  font-size: 0.95rem;
+  font-size: 0.93rem;
   color: #cbd5e1;
-  line-height: 1.65;
-  margin-bottom: 24px;
+  line-height: 1.6;
+  margin-bottom: 20px;
   font-style: normal;
 }
 
 .review-author {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding-top: 16px;
+  padding-top: 14px;
 }
 
-.author-avatar {
+.author-img {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  font-weight: 800;
-  box-shadow: 0 4px 12px var(--primary-glow);
+  object-fit: cover;
+  border: 2px solid rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   flex-shrink: 0;
 }
-
-.author-avatar.alt-1 { background: linear-gradient(135deg, #06b6d4, #6366f1); }
-.author-avatar.alt-2 { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
-.author-avatar.alt-3 { background: linear-gradient(135deg, #10b981, #06b6d4); }
-.author-avatar.alt-4 { background: linear-gradient(135deg, #f59e0b, #ef4444); }
-.author-avatar.alt-5 { background: linear-gradient(135deg, #6366f1, #10b981); }
 
 .author-info {
   display: flex;
   flex-direction: column;
+  gap: 1px;
 }
 
 .author-name {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: #ffffff;
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.author-handle {
+  font-size: 0.78rem;
+  color: #818cf8;
+  font-weight: 500;
 }
 
 .verified-icon {
@@ -1314,7 +1340,7 @@ a {
 }
 
 .author-role {
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
 }
 
