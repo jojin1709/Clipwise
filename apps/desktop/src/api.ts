@@ -29,3 +29,22 @@ export async function record(url: string, workflow: unknown[], pacing: "quick" |
   if (!r.ok) throw new Error(data.error || "Recording failed");
   return data as { runId: string; video: string | null; mp4: string | null; videoUrl: string | null; renderError?: string | null };
 }
+
+export async function getProgress() {
+  try {
+    const r = await fetch(`${API}/api/progress`);
+    if (!r.ok) return null;
+    return r.json() as Promise<{
+      active: boolean;
+      phase: string;
+      stepIndex: number;
+      totalSteps: number;
+      percent: number;
+      sectionName: string;
+      message: string;
+    }>;
+  } catch {
+    return null;
+  }
+}
+

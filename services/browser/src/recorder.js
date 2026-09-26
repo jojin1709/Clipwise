@@ -199,14 +199,10 @@ async function performAction(page, action, baseUrl, pacingMultiplier = 1.0) {
   }
 }
 
-export async function recordWorkflow({ url, workflow, runDir, pacing = "standard" }) {
+export async function recordWorkflow({ url, workflow, runDir, pacing = "standard", onProgress }) {
   const safe = await assertSafeTarget(url);
   await fs.mkdir(runDir, { recursive: true });
 
-  // Pacing multipliers:
-  // quick: 0.7x (crisp 1-2 min video)
-  // standard: 1.2x (3-5 min full walkthrough)
-  // deep: 2.8x (10-20 min in-depth presentation)
   const pacingMultiplier = pacing === "deep" ? 2.8 : pacing === "quick" ? 0.7 : 1.2;
 
   const browser = await chromium.launch({
@@ -225,7 +221,24 @@ export async function recordWorkflow({ url, workflow, runDir, pacing = "standard
   const page = await context.newPage();
 
   try {
-    for (const action of workflow) {
+    let currentSection = "";
+    for (let i = 0; i < workflow.length; i++) {
+      const action = workflow[i];
+      if (action.action === "banner") {
+        currentSection = action.title || "";
+      }
+      const pct = Math.min(88, Math.round(((i + 1) / workflow.length) * 85) + 5);
+      if (onProgress) {
+        onProgress({
+          stepIndex: i + 1,
+          totalSteps: workflow.length,
+          percent: pct,
+          sectionName: currentSection || "Exploring site",
+          message: action.action === "goto" ? `Navigating to ${currentSection || action.url}...`
+                 : action.action === "smoothScroll" ? `Showcasing tools in ${currentSection}...`
+                 : `Presenting ${currentSection}...`
+        });
+      }
       await performAction(page, action, safe.href, pacingMultiplier);
     }
 

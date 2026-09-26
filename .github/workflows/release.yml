@@ -81,9 +81,13 @@ jobs:
           }
 
           # Generate SHA256 Checksums
-          Get-ChildItem -Path "dist-release/*" | Where-Object { -not $_.PSIsContainer } | Get-FileHash -Algorithm SHA256 | ForEach-Object {
-            "$($_.Hash)  $($_.Path | Split-Path -Leaf)"
-          } | Out-File -Encoding utf8 -FilePath "dist-release/SHA256SUMS.txt"
+          $binFiles = Get-ChildItem -Path "dist-release/*" | Where-Object { -not $_.PSIsContainer -and $_.Name -ne "SHA256SUMS.txt" }
+          $checksumLines = @()
+          foreach ($f in $binFiles) {
+            $h = (Get-FileHash -Path $f.FullName -Algorithm SHA256).Hash
+            $checksumLines += "$h  $($f.Name)"
+          }
+          [System.IO.File]::WriteAllLines((Join-Path (Get-Location) "dist-release/SHA256SUMS.txt"), $checksumLines)
 
           # Determine Tag & Title
           if ("${{ github.ref }}" -like "refs/tags/v*") {

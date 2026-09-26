@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ArrowRight, CheckCircle2, Clapperboard, Download, Film, Gauge, Globe2, Home, ListChecks, Play, Plus, Settings, Sparkles, Video, Wand2 } from "lucide-react";
-import { analyze, health, record } from "./api";
+import { analyze, getProgress, health, record } from "./api";
 import { useStore } from "./store";
 
 const styles = [
@@ -18,6 +18,41 @@ function App() {
   const [busy, setBusy] = useState(false);
   const [service, setService] = useState<"unknown" | "online" | "offline">("unknown");
   const [message, setMessage] = useState("");
+  const [progress, setProgress] = useState<{
+    active: boolean;
+    phase: string;
+    stepIndex: number;
+    totalSteps: number;
+    percent: number;
+    sectionName: string;
+    message: string;
+  } | null>(null);
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setInterval> | null = null;
+    let pollTimer: ReturnType<typeof setInterval> | null = null;
+
+    if (busy) {
+      setElapsed(0);
+      timer = setInterval(() => {
+        setElapsed(e => e + 1);
+      }, 1000);
+
+      pollTimer = setInterval(async () => {
+        const p = await getProgress();
+        if (p) setProgress(p);
+      }, 700);
+    } else {
+      setProgress(null);
+      setElapsed(0);
+    }
+
+    return () => {
+      if (timer) clearInterval(timer);
+      if (pollTimer) clearInterval(pollTimer);
+    };
+  }, [busy]);
 
   useEffect(() => {
     health()
@@ -101,6 +136,39 @@ function App() {
             Browser engine {service === "online" ? "online" : service === "offline" ? "offline" : "ready"}
           </div>
         </header>
+
+        {busy && (
+          <div className="progress-banner">
+            <div className="progress-banner-top">
+              <div className="progress-info">
+                <span className="live-dot" />
+                <strong>
+                  {progress?.phase === "rendering" ? "Finalizing Video with FFmpeg"
+                  : progress?.phase === "exploring" ? "Analyzing Website Structure"
+                  : `Recording Section: ${progress?.sectionName || "Exploring Site"}`}
+                </strong>
+                <span className="progress-sub">
+                  {progress?.message || "Running automated Playwright browser session..."}
+                </span>
+              </div>
+              <div className="progress-stats">
+                <span className="timer-badge">⏱️ {Math.floor(elapsed / 60)}m {elapsed % 60}s elapsed</span>
+                <span className="pct-badge">
+                  {progress?.percent || Math.min(92, Math.round((elapsed / ((state.selected.length || 8) * (state.pacing === "deep" ? 75 : state.pacing === "quick" ? 14 : 32) || 200)) * 90) + 5)}%
+                </span>
+              </div>
+            </div>
+
+            <div className="progress-track">
+              <div
+                className="progress-fill"
+                style={{
+                  width: `${progress?.percent || Math.min(92, Math.round((elapsed / ((state.selected.length || 8) * (state.pacing === "deep" ? 75 : state.pacing === "quick" ? 14 : 32) || 200)) * 90) + 5)}%`
+                }}
+              />
+            </div>
+          </div>
+        )}
 
         {message && <div className="notice">{message}<button onClick={() => setMessage("")}>×</button></div>}
 

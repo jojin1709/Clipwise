@@ -13,6 +13,16 @@ import { renderMp4 } from "./render.js";
 const PORT = Number(process.env.CLIPWISE_BROWSER_PORT || 37771);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "runs");
 
+let currentProgress = {
+  active: false,
+  phase: "idle",
+  stepIndex: 0,
+  totalSteps: 0,
+  percent: 0,
+  sectionName: "",
+  message: ""
+};
+
 async function json(res, status, payload) {
   res.writeHead(status, { "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*" });
   res.end(JSON.stringify(payload));
@@ -45,6 +55,10 @@ const server = http.createServer(async (req, res) => {
 
     if ((req.method === "GET" || req.method === "HEAD") && req.url === "/health") {
       return json(res, 200, { ok: true, service: "clipwise-browser", port: PORT });
+    }
+
+    if ((req.method === "GET" || req.method === "HEAD") && req.url === "/api/progress") {
+      return json(res, 200, currentProgress);
     }
 
     // Static file serving for run artifacts (videos, screenshots, JSON)
@@ -103,6 +117,15 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (req.method === "POST" && req.url === "/api/analyze") {
+      currentProgress = {
+        active: true,
+        phase: "exploring",
+        stepIndex: 1,
+        totalSteps: 3,
+        percent: 25,
+        sectionName: "Scanning Pages",
+        message: "Crawling website structure & capturing screenshots..."
+      };
       const input = await body(req);
       const parsed = new URL(input.url);
       if (!["http:", "https:"].includes(parsed.protocol)) throw new Error("Only HTTP(S) URLs are allowed.");
@@ -152,6 +175,15 @@ const server = http.createServer(async (req, res) => {
       }
 
       await fs.writeFile(path.join(runDir, "analysis.json"), JSON.stringify({ result, features, plan }, null, 2));
+      currentProgress = {
+        active: false,
+        phase: "done",
+        stepIndex: 3,
+        totalSteps: 3,
+        percent: 100,
+        sectionName: "Analysis Complete",
+        message: `${features.length} sections and capabilities discovered`
+      };
       return json(res, 200, { runId, result, features, plan });
     }
 
@@ -159,21 +191,62 @@ const server = http.createServer(async (req, res) => {
       const input = await body(req);
       const runId = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
       const runDir = path.join(ROOT, runId);
+      const totalSteps = (input.workflow || []).length;
+
+      currentProgress = {
+        active: true,
+        phase: "recording",
+        stepIndex: 0,
+        totalSteps,
+        percent: 5,
+        sectionName: "Initializing Browser",
+        message: "Launching automated browser recording session..."
+      };
+
       const video = await recordWorkflow({
         url: input.url,
         workflow: input.workflow || [{ action: "goto", url: input.url }],
         runDir,
-        pacing: input.pacing || "standard"
+        pacing: input.pacing || "standard",
+        onProgress: (p) => {
+          currentProgress = {
+            ...currentProgress,
+            ...p,
+            active: true,
+            phase: "recording"
+          };
+        }
       });
+
       let mp4 = null;
       let renderError = null;
       if (video) {
+        currentProgress = {
+          active: true,
+          phase: "rendering",
+          stepIndex: totalSteps,
+          totalSteps,
+          percent: 92,
+          sectionName: "Video Encoding",
+          message: "Encoding H.264 MP4 showcase video with FFmpeg..."
+        };
         try {
           mp4 = await renderMp4(video, path.join(runDir, "showcase.mp4"));
         } catch (error) {
           renderError = error instanceof Error ? error.message : String(error);
         }
       }
+
+      currentProgress = {
+        active: false,
+        phase: "done",
+        stepIndex: totalSteps,
+        totalSteps,
+        percent: 100,
+        sectionName: "Showcase Complete",
+        message: "Video rendered successfully!"
+      };
+
       const videoUrl = mp4
         ? `http://127.0.0.1:${PORT}/runs/${runId}/showcase.mp4`
         : video
