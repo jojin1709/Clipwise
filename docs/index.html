@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clipwise — Turn Any Website Into a Polished Product Showcase Video</title>
+  <meta name="description" content="Clipwise launches an autonomous hands-on user agent that opens the browser, types the URL, moves the mouse, clicks interactive tools, transforms live data, and renders studio-quality MP4 demo videos.">
+  <meta property="og:title" content="Clipwise — Autonomous Product Demo Video Generator">
+  <meta property="og:description" content="AI-powered website showcase video generator with human mouse movements, interactive tool clicking, and local FFmpeg rendering.">
+  <meta property="og:type" content="website">
+
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand">
+        <div class="brand-icon">⚡</div>
+        <span>Clipwise</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#demo">Live Demo</a>
+        <a href="#showcase">Pipeline Stages</a>
+        <a href="#features">Features</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#download">Download</a>
+        <a href="https://github.com/jojin1709/Clipwise" target="_blank" rel="noopener">GitHub ↗</a>
+      </nav>
+      <a href="#download" class="nav-cta">
+        <span>⬇️ Download for Windows</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="badge">✨ Autonomous AI Showcase Video Generator for Web Apps</div>
+    <h1>Turn Any Website Into a <br><span class="gradient-text">Polished Product Showcase Video.</span></h1>
+    <p>
+      Clipwise launches an autonomous hands-on agent that simulates real human exploration: 
+      it opens the browser, types the URL, moves the mouse along natural curves, tests text inputs, 
+      clicks interactive tool buttons, and renders studio-quality MP4 demos — 100% locally.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#download" id="hero-download-btn" class="btn-primary">
+        <span>⬇️</span> Download for Windows (.exe)
+      </a>
+      <a href="#demo" class="btn-secondary">
+        <span>▶</span> Watch Interactive Simulation
+      </a>
+    </div>
+
+    <div class="version-pill" id="release-version-pill">
+      <span class="dot"></span> Fetching latest GitHub release...
+    </div>
+  </section>
+
+  <!-- Interactive Super Demo Section -->
+  <section class="demo-section" id="demo">
+    <div class="section-header">
+      <h2>Experience the Autonomous Agent in Action</h2>
+      <p>Watch how Clipwise explores web applications, inputs realistic text, and clicks conversion buttons live.</p>
+    </div>
+
+    <div class="demo-wrapper">
+      <!-- Top Chrome Toolbar -->
+      <div class="demo-toolbar">
+        <div class="window-dots">
+          <span class="red"></span>
+          <span class="yellow"></span>
+          <span class="green"></span>
+        </div>
+        <div class="demo-omnibox">
+          <span style="color: #22c55e;">🔒</span>
+          <input id="demo-url-input" type="text" value="https://demo.clipwise.app/text-studio" />
+        </div>
+        <div class="demo-controls">
+          <button id="demo-run-btn" class="demo-run-btn">
+            <span>▶</span> Run Simulation
+          </button>
+          <button id="demo-reset-btn" class="demo-reset-btn">Reset</button>
+        </div>
+      </div>
+
+      <!-- Quick Presets -->
+      <div class="demo-quick-picks">
+        <span>Try Presets:</span>
+        <button class="pick-pill active" data-url="https://demo.clipwise.app/text-studio">Text Formatter Studio</button>
+        <button class="pick-pill" data-url="https://demo.clipwise.app/analytics">SaaS Analytics Dashboard</button>
+        <button class="pick-pill" data-url="https://demo.clipwise.app/markdown">AI Markdown Editor</button>
+        <button class="pick-pill" data-url="https://demo.clipwise.app/calculator">Financial Calculator</button>
+      </div>
+
+      <!-- Stage Canvas -->
+      <div class="demo-stage" id="demo-stage">
+        <!-- Virtual Mouse Pointer -->
+        <div class="virtual-cursor" id="virtual-cursor">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <path d="M5.5 3.2V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.88c.45 0 .67-.54.35-.85L5.85 2.85a.5.5 0 0 0-.35.35z" fill="#ffffff" stroke="#0f172a" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          <div class="glow-dot"></div>
+        </div>
+
+        <!-- Simulated Web Application -->
+        <div class="sim-app">
+          <div class="sim-header">
+            <div class="sim-logo">⚡ Clipwise Demo Studio</div>
+            <div class="sim-nav">
+              <span>Text Tools</span>
+              <span>Converters</span>
+              <span>Settings</span>
+            </div>
+          </div>
+
+          <div class="sim-body">
+            <h3 class="sim-tool-title">Interactive Text Formatter</h3>
+            <p class="sim-tool-sub">Easily convert any text into uppercase, title case, or lower case in a single click.</p>
+
+            <textarea id="sim-textarea" class="sim-textarea" readonly></textarea>
+
+            <div class="sim-button-row">
+              <button id="sim-btn-upper" class="sim-btn">UPPER CASE</button>
+              <button id="sim-btn-title" class="sim-btn">Title Case</button>
+              <button id="sim-btn-copy" class="sim-btn">Copy to clipboard</button>
+            </div>
+
+            <div id="sim-toast" class="sim-toast">✓ Copied to clipboard!</div>
+          </div>
+        </div>
+
+        <!-- Floating Lower-Third HUD -->
+        <div class="demo-hud" id="demo-hud">
+          <div class="hud-badge">CLIPWISE AGENT</div>
+          <div class="hud-text">
+            <span class="hud-title" id="hud-title">Agent Ready</span>
+            <span class="hud-sub" id="hud-sub">Click 'Run Simulation' to watch hands-on exploration</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showcase Gallery (Pure Styled Visual Cards) -->
+  <section class="gallery-section" id="showcase">
+    <div class="section-header">
+      <h2>How the Autonomous Agent Operates</h2>
+      <p>Three core phases engineered into Clipwise's automated recording engine.</p>
+    </div>
+
+    <div class="gallery-grid">
+      <!-- Card 1 -->
+      <div class="gallery-card">
+        <div class="gallery-media card-visual-launch">
+          <div class="visual-omnibox">
+            <span>🔒</span>
+            <code>https://demo.clipwise.app/studio</code>
+            <span class="visual-cursor-blink">|</span>
+          </div>
+          <div class="visual-badge-pill">Phase 01: Launch & Omnibox</div>
+          <div class="visual-loader-line"></div>
+        </div>
+        <div class="gallery-caption">
+          <span class="gallery-tag">Stage 1: Browser Launch</span>
+          <h4>Omnibox Address Bar Typing</h4>
+          <p>The virtual mouse focuses the address bar and types the target URL character-by-character with human typing cadence.</p>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="gallery-card">
+        <div class="gallery-media card-visual-interactive">
+          <div class="visual-tool-preview">
+            <div class="visual-tool-header">Interactive Tool Canvas</div>
+            <div class="visual-tool-body">CLIPWISE GENERATES BEAUTIFUL SHOWCASE VIDEOS</div>
+            <div class="visual-btn-group">
+              <span class="visual-pill active">UPPER CASE</span>
+              <span class="visual-pill">Title Case</span>
+              <span class="visual-pill">Copy</span>
+            </div>
+            <div class="visual-floating-pointer">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M5.5 3.2V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.88c.45 0 .67-.54.35-.85L5.85 2.85a.5.5 0 0 0-.35.35z" fill="#ffffff" stroke="#0f172a" stroke-width="1.8"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="gallery-caption">
+          <span class="gallery-tag">Stage 2: Hands-On Interaction</span>
+          <h4>Live Action Button Clicking</h4>
+          <p>Agent discovers textareas, types context-aware demo content, and clicks conversion buttons with glowing ripple effects.</p>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="gallery-card">
+        <div class="gallery-media card-visual-render">
+          <div class="visual-player-box">
+            <div class="visual-play-icon">▶</div>
+            <div class="visual-player-stats">
+              <span>1080p 60fps</span>
+              <span>H.264 MP4</span>
+              <span>54.6s</span>
+            </div>
+          </div>
+          <div class="visual-timeline-track">
+            <div class="visual-timeline-fill"></div>
+          </div>
+        </div>
+        <div class="gallery-caption">
+          <span class="gallery-tag">Stage 3: Real-Time Results</span>
+          <h4>Studio MP4 Render & Export</h4>
+          <p>Text updates live inside the DOM on video while the agent explores features, tabs, and exports crisp universal MP4.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section class="features-section" id="features">
+    <div class="section-header">
+      <h2>Built for Modern Product Teams</h2>
+      <p>Everything you need to turn digital products into high-converting videos automatically.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-box">
+        <div class="feature-icon">🖱️</div>
+        <h3>Human-like Mouse & Typing</h3>
+        <p>Smooth cubic Bezier curve trajectories, randomized human typing delays, subtle overshoot, and glowing ripple click animations.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="feature-icon">🔒</div>
+        <h3>100% Local-First & Private</h3>
+        <p>No external cloud APIs or subscriptions required. Runs completely on your local machine using Playwright, Tauri, and FFmpeg.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="feature-icon">⏱️</div>
+        <h3>Live Progress Bar</h3>
+        <p>Real-time progress telemetry with step-by-step section names, elapsed timer, and completion estimates displayed in the desktop app.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="feature-icon">🧠</div>
+        <h3>Smart Feature Discovery</h3>
+        <p>Crawls headings, textareas, interactive buttons, search bars, and generates an optimized multi-scene presentation tour.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="feature-icon">🎬</div>
+        <h3>Direct H.264 MP4 Export</h3>
+        <p>Hardware-accelerated encoding produces universal MP4 videos ready for Twitter / X, Product Hunt, GitHub, or documentation.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="feature-icon">⚡</div>
+        <h3>Ollama AI or Heuristic Modes</h3>
+        <p>Pair with local Ollama models (e.g. Qwen, Llama 3) for AI storytelling or use the fast built-in heuristic planner.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Flow -->
+  <section class="arch-section" id="architecture">
+    <div class="section-header">
+      <h2>How Clipwise Works</h2>
+      <p>An end-to-end automated pipeline from single URL to studio MP4 video.</p>
+    </div>
+
+    <div class="flow-container">
+      <div class="flow-step">
+        <div class="step-num">STEP 01</div>
+        <div class="step-title">URL Crawl</div>
+        <div class="step-desc">Extracts DOM nodes, headings, textareas, and buttons.</div>
+      </div>
+      <div class="flow-arrow">➔</div>
+
+      <div class="flow-step">
+        <div class="step-num">STEP 02</div>
+        <div class="step-title">Feature Discovery</div>
+        <div class="step-desc">Generates interactive workflows and demo scenarios.</div>
+      </div>
+      <div class="flow-arrow">➔</div>
+
+      <div class="flow-step">
+        <div class="step-num">STEP 03</div>
+        <div class="step-title">Autonomous Agent</div>
+        <div class="step-desc">Types URL, moves mouse, inputs data, and clicks tools.</div>
+      </div>
+      <div class="flow-arrow">➔</div>
+
+      <div class="flow-step">
+        <div class="step-num">STEP 04</div>
+        <div class="step-title">FFmpeg Render</div>
+        <div class="step-desc">Encodes WebM stream into crisp 1080p H.264 MP4.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download Section -->
+  <section class="download-section" id="download">
+    <div class="section-header">
+      <h2>Download Clipwise for Windows</h2>
+      <p>Free, open source, and ready to run on Windows 10 & 11 (64-bit).</p>
+    </div>
+
+    <div class="download-cards">
+      <div class="download-card featured">
+        <div class="card-badge">RECOMMENDED</div>
+        <div class="download-icon">💻</div>
+        <h3>Windows Installer</h3>
+        <p>Complete setup with desktop shortcut, start menu entry, and automated updates.</p>
+        <a id="btn-download-nsis" href="https://github.com/jojin1709/Clipwise/releases/latest" class="download-btn">
+          ⬇️ Download Installer (.exe)
+        </a>
+      </div>
+
+      <div class="download-card">
+        <div class="download-icon">📦</div>
+        <h3>Portable Executable</h3>
+        <p>Zero installation required. Extract and run directly from any folder or USB drive.</p>
+        <a id="btn-download-portable" href="https://github.com/jojin1709/Clipwise/releases/latest" class="download-btn">
+          ⬇️ Download Portable (.exe)
+        </a>
+      </div>
+
+      <div class="download-card">
+        <div class="download-icon">🏢</div>
+        <h3>MSI Enterprise Package</h3>
+        <p>Standard Windows Installer package for managed enterprise and silent IT deployment.</p>
+        <a id="btn-download-msi" href="https://github.com/jojin1709/Clipwise/releases/latest" class="download-btn">
+          ⬇️ Download MSI Package (.msi)
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      Clipwise is open source software released under the <a href="https://github.com/jojin1709/Clipwise/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>.
+      View source code on <a href="https://github.com/jojin1709/Clipwise" target="_blank" rel="noopener">GitHub</a>.
+    </p>
+    <p style="margin-top: 8px; font-size: 0.8rem; color: #64748b;">
+      Engineered with Tauri, Rust, Playwright, React, and FFmpeg.
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
