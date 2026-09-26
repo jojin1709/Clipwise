@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="clipwiseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+  </defs>
+  <!-- Squircle Base -->
+  <rect x="4" y="4" width="120" height="120" rx="34" ry="34" fill="url(#clipwiseGrad)"/>
+  <rect x="4" y="4" width="120" height="120" rx="34" ry="34" fill="none" stroke="rgba(255, 255, 255, 0.25)" stroke-width="3"/>
+  
+  <!-- Centered Lucide Bolt Icon -->
+  <g transform="translate(32, 28) scale(2.65)">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

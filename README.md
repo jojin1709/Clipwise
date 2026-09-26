@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/assets/icon.png" width="96" height="96" alt="Clipwise Logo" />
+
 # Clipwise
 
 ### Local-First AI Product Demo Generator — Turn Any Website URL into a Polished Video
