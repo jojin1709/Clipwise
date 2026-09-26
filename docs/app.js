@@ -1,5 +1,6 @@
 // Clipwise Interactive Documentation & Demo Engine
 document.addEventListener("DOMContentLoaded", () => {
+  initLivingBackground();
   initGitHubReleaseDownloader();
   initInteractiveDemo();
   initScrollReveal();
@@ -377,4 +378,144 @@ function initScrollReveal() {
   });
 
   reveals.forEach(el => observer.observe(el));
+}
+
+// 4. Living Animated Cyber Background & Interactive Canvas Starfield
+function initLivingBackground() {
+  const canvas = document.getElementById("bg-canvas");
+  const cursorGlow = document.getElementById("cursor-glow");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  let width = (canvas.width = window.innerWidth);
+  let height = (canvas.height = window.innerHeight);
+
+  let mouse = { x: width / 2, y: height / 2, targetX: width / 2, targetY: height / 2, active: false };
+
+  window.addEventListener("resize", () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  // Track cursor for spotlight and particle flocking
+  window.addEventListener("mousemove", (e) => {
+    mouse.targetX = e.clientX;
+    mouse.targetY = e.clientY;
+    mouse.active = true;
+
+    if (cursorGlow) {
+      cursorGlow.style.left = `${e.clientX}px`;
+      cursorGlow.style.top = `${e.clientY}px`;
+      cursorGlow.style.opacity = "1";
+    }
+  });
+
+  window.addEventListener("mouseleave", () => {
+    mouse.active = false;
+    if (cursorGlow) {
+      cursorGlow.style.opacity = "0";
+    }
+  });
+
+  // Create particles
+  const PARTICLE_COUNT = Math.min(55, Math.floor(window.innerWidth / 28));
+  const colors = [
+    { r: 99, g: 102, b: 241 },   // Indigo
+    { r: 168, g: 85, b: 247 },  // Purple
+    { r: 56, g: 189, b: 248 },  // Cyan
+    { r: 244, g: 114, b: 182 }  // Pink
+  ];
+
+  class Particle {
+    constructor() {
+      this.reset(true);
+    }
+
+    reset(initial = false) {
+      this.x = Math.random() * width;
+      this.y = initial ? Math.random() * height : height + 10;
+      this.vx = (Math.random() - 0.5) * 0.45;
+      this.vy = -(Math.random() * 0.5 + 0.25);
+      this.radius = Math.random() * 1.8 + 1.2;
+      this.baseAlpha = Math.random() * 0.45 + 0.2;
+      this.alpha = this.baseAlpha;
+      this.pulseSpeed = Math.random() * 0.02 + 0.01;
+      this.pulsePhase = Math.random() * Math.PI * 2;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.pulsePhase += this.pulseSpeed;
+      this.alpha = this.baseAlpha + Math.sin(this.pulsePhase) * 0.15;
+
+      // Mouse proximity interaction
+      if (mouse.active) {
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 140) {
+          const force = (140 - dist) / 140;
+          this.x -= (dx / dist) * force * 1.5;
+          this.y -= (dy / dist) * force * 1.5;
+        }
+      }
+
+      // Loop boundaries
+      if (this.y < -20) this.reset();
+      if (this.x < -20) this.x = width + 20;
+      if (this.x > width + 20) this.x = -20;
+    }
+
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${Math.max(0, this.alpha)})`;
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.8)`;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  const particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
+
+  // Animation Loop
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    // Smooth cursor interpolation
+    mouse.x += (mouse.targetX - mouse.x) * 0.12;
+    mouse.y += (mouse.targetY - mouse.y) * 0.12;
+
+    // Draw connecting constellation lines
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 95) {
+          const lineAlpha = (1 - dist / 95) * 0.15;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(129, 140, 248, ${lineAlpha})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Update and draw particles
+    particles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
 }
