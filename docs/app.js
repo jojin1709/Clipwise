@@ -1,6 +1,6 @@
 // Clipwise Interactive Documentation & Demo Engine
 document.addEventListener("DOMContentLoaded", () => {
-  initLivingBackground();
+  initAppleIntelligenceAurora();
   initGitHubReleaseDownloader();
   initInteractiveDemo();
   initScrollReveal();
@@ -380,142 +380,191 @@ function initScrollReveal() {
   reveals.forEach(el => observer.observe(el));
 }
 
-// 4. Living Animated Cyber Background & Interactive Canvas Starfield
-function initLivingBackground() {
-  const canvas = document.getElementById("bg-canvas");
-  const cursorGlow = document.getElementById("cursor-glow");
+// 4. Apple Intelligence / Siri-Style Fluid Aurora Wave Engine
+function initAppleIntelligenceAurora() {
+  const canvas = document.getElementById("bg-aurora");
   if (!canvas) return;
 
   const ctx = canvas.getContext("2d");
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
+  let width, height;
+  let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
-  let mouse = { x: width / 2, y: height / 2, targetX: width / 2, targetY: height / 2, active: false };
+  function resize() {
+    width = canvas.width = Math.floor(window.innerWidth * dpr * 0.75);
+    height = canvas.height = Math.floor(window.innerHeight * dpr * 0.75);
+  }
 
-  window.addEventListener("resize", () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
+  resize();
+  window.addEventListener("resize", resize);
 
-  // Track cursor for spotlight and particle flocking
+  let mouse = { x: -1000, y: -1000, targetX: -1000, targetY: -1000, active: false };
+
   window.addEventListener("mousemove", (e) => {
-    mouse.targetX = e.clientX;
-    mouse.targetY = e.clientY;
+    mouse.targetX = (e.clientX / window.innerWidth) * width;
+    mouse.targetY = (e.clientY / window.innerHeight) * height;
     mouse.active = true;
-
-    if (cursorGlow) {
-      cursorGlow.style.left = `${e.clientX}px`;
-      cursorGlow.style.top = `${e.clientY}px`;
-      cursorGlow.style.opacity = "1";
-    }
   });
 
   window.addEventListener("mouseleave", () => {
     mouse.active = false;
-    if (cursorGlow) {
-      cursorGlow.style.opacity = "0";
-    }
   });
 
-  // Create particles
-  const PARTICLE_COUNT = Math.min(55, Math.floor(window.innerWidth / 28));
-  const colors = [
-    { r: 99, g: 102, b: 241 },   // Indigo
-    { r: 168, g: 85, b: 247 },  // Purple
-    { r: 56, g: 189, b: 248 },  // Cyan
-    { r: 244, g: 114, b: 182 }  // Pink
+  // Layered Apple Intelligence Wave Definitions
+  const waves = [
+    {
+      // Violet to Iris Wave
+      colorStart: "rgba(99, 102, 241, 0.45)",
+      colorMid: "rgba(139, 92, 246, 0.40)",
+      colorEnd: "rgba(236, 72, 153, 0.35)",
+      yBase: 0.35,
+      amplitude: 110,
+      wavelength: 0.0022,
+      speed: 0.0008,
+      thickness: 180,
+      phase: 0,
+      harmonics: [
+        { freq: 0.0012, speed: 0.0014, amp: 45 },
+        { freq: 0.0028, speed: -0.0010, amp: 25 }
+      ]
+    },
+    {
+      // Cyan to Electric Indigo
+      colorStart: "rgba(6, 182, 212, 0.45)",
+      colorMid: "rgba(59, 130, 246, 0.42)",
+      colorEnd: "rgba(99, 102, 241, 0.35)",
+      yBase: 0.42,
+      amplitude: 130,
+      wavelength: 0.0018,
+      speed: -0.0007,
+      thickness: 200,
+      phase: 2.1,
+      harmonics: [
+        { freq: 0.0016, speed: -0.0012, amp: 55 },
+        { freq: 0.0032, speed: 0.0009, amp: 30 }
+      ]
+    },
+    {
+      // Neon Magenta to Sunset Amber
+      colorStart: "rgba(236, 72, 153, 0.40)",
+      colorMid: "rgba(244, 63, 94, 0.36)",
+      colorEnd: "rgba(251, 146, 60, 0.32)",
+      yBase: 0.48,
+      amplitude: 100,
+      wavelength: 0.0026,
+      speed: 0.0009,
+      thickness: 170,
+      phase: 4.2,
+      harmonics: [
+        { freq: 0.0014, speed: 0.0016, amp: 40 },
+        { freq: 0.0038, speed: -0.0014, amp: 20 }
+      ]
+    },
+    {
+      // Deep Luminous Iris Glow Wave
+      colorStart: "rgba(124, 58, 237, 0.38)",
+      colorMid: "rgba(99, 102, 241, 0.35)",
+      colorEnd: "rgba(14, 165, 233, 0.30)",
+      yBase: 0.55,
+      amplitude: 120,
+      wavelength: 0.0020,
+      speed: -0.0006,
+      thickness: 220,
+      phase: 1.2,
+      harmonics: [
+        { freq: 0.0018, speed: -0.0011, amp: 50 },
+        { freq: 0.0025, speed: 0.0013, amp: 35 }
+      ]
+    }
   ];
 
-  class Particle {
-    constructor() {
-      this.reset(true);
-    }
+  let time = 0;
 
-    reset(initial = false) {
-      this.x = Math.random() * width;
-      this.y = initial ? Math.random() * height : height + 10;
-      this.vx = (Math.random() - 0.5) * 0.45;
-      this.vy = -(Math.random() * 0.5 + 0.25);
-      this.radius = Math.random() * 1.8 + 1.2;
-      this.baseAlpha = Math.random() * 0.45 + 0.2;
-      this.alpha = this.baseAlpha;
-      this.pulseSpeed = Math.random() * 0.02 + 0.01;
-      this.pulsePhase = Math.random() * Math.PI * 2;
-      this.color = colors[Math.floor(Math.random() * colors.length)];
-    }
+  function render() {
+    time += 1;
 
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
-      this.pulsePhase += this.pulseSpeed;
-      this.alpha = this.baseAlpha + Math.sin(this.pulsePhase) * 0.15;
+    // Smooth mouse position damping
+    mouse.x += (mouse.targetX - mouse.x) * 0.08;
+    mouse.y += (mouse.targetY - mouse.y) * 0.08;
 
-      // Mouse proximity interaction
-      if (mouse.active) {
-        const dx = mouse.x - this.x;
-        const dy = mouse.y - this.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 140) {
-          const force = (140 - dist) / 140;
-          this.x -= (dx / dist) * force * 1.5;
-          this.y -= (dy / dist) * force * 1.5;
-        }
-      }
-
-      // Loop boundaries
-      if (this.y < -20) this.reset();
-      if (this.x < -20) this.x = width + 20;
-      if (this.x > width + 20) this.x = -20;
-    }
-
-    draw() {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${Math.max(0, this.alpha)})`;
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.8)`;
-      ctx.fill();
-      ctx.shadowBlur = 0;
-    }
-  }
-
-  const particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
-
-  // Animation Loop
-  function animate() {
     ctx.clearRect(0, 0, width, height);
 
-    // Smooth cursor interpolation
-    mouse.x += (mouse.targetX - mouse.x) * 0.12;
-    mouse.y += (mouse.targetY - mouse.y) * 0.12;
+    // Additive screen blend mode for glowing iridescent light interaction
+    ctx.globalCompositeOperation = "screen";
 
-    // Draw connecting constellation lines
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+    const segments = 45;
+    const stepX = width / segments;
 
-        if (dist < 95) {
-          const lineAlpha = (1 - dist / 95) * 0.15;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(129, 140, 248, ${lineAlpha})`;
-          ctx.lineWidth = 0.8;
-          ctx.stroke();
+    waves.forEach((w) => {
+      const centerY = height * w.yBase;
+      const grad = ctx.createLinearGradient(0, centerY - w.thickness, width, centerY + w.thickness);
+      grad.addColorStop(0, w.colorStart);
+      grad.addColorStop(0.5, w.colorMid);
+      grad.addColorStop(1, w.colorEnd);
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+
+      // Top wave curve
+      for (let i = 0; i <= segments; i++) {
+        const x = i * stepX;
+        let y = centerY;
+
+        // Primary wave
+        y += Math.sin(x * w.wavelength + time * w.speed + w.phase) * w.amplitude;
+
+        // Harmonics
+        w.harmonics.forEach(h => {
+          y += Math.sin(x * h.freq + time * h.speed) * h.amp;
+        });
+
+        // Mouse displacement
+        if (mouse.active) {
+          const dx = x - mouse.x;
+          const dy = y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 260) {
+            const force = (1 - dist / 260);
+            y += Math.sin(dist * 0.03 - time * 0.05) * force * 55;
+          }
+        }
+
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
         }
       }
-    }
 
-    // Update and draw particles
-    particles.forEach(p => {
-      p.update();
-      p.draw();
+      // Bottom return curve to form filled ribbon
+      for (let i = segments; i >= 0; i--) {
+        const x = i * stepX;
+        let y = centerY + w.thickness;
+
+        y += Math.sin(x * w.wavelength + time * w.speed + w.phase + 0.8) * (w.amplitude * 0.85);
+
+        w.harmonics.forEach(h => {
+          y += Math.cos(x * h.freq + time * h.speed) * (h.amp * 0.8);
+        });
+
+        if (mouse.active) {
+          const dx = x - mouse.x;
+          const dy = y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 260) {
+            const force = (1 - dist / 260);
+            y += Math.cos(dist * 0.03 - time * 0.05) * force * 45;
+          }
+        }
+
+        ctx.lineTo(x, y);
+      }
+
+      ctx.closePath();
+      ctx.fill();
     });
 
-    requestAnimationFrame(animate);
+    requestAnimationFrame(render);
   }
 
-  animate();
+  render();
 }

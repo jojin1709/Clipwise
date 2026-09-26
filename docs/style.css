@@ -42,178 +42,35 @@ body {
   position: relative;
 }
 
-/* Background Animated Moving Cyber Grid, Orbs & Light Beams */
+/* Apple Intelligence / Siri-style Fluid Aurora Animated Background */
 .bg-ambient {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
+  background-color: #06080e;
 }
 
-#bg-canvas {
+#bg-aurora {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1;
-  opacity: 0.85;
-}
-
-.bg-grid {
-  position: absolute;
-  inset: -128px;
-  background-image: 
-    linear-gradient(to right, rgba(99, 102, 241, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(99, 102, 241, 0.08) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse at 50% 40%, black 45%, transparent 88%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 45%, transparent 88%);
-  animation: gridDrift 24s linear infinite;
-  z-index: 2;
+  z-index: 0;
+  filter: blur(28px);
+  transform: scale(1.05); /* Avoid blur clipping on borders */
   will-change: transform;
 }
 
-@keyframes gridDrift {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  100% {
-    transform: translate3d(64px, 64px, 0);
-  }
-}
-
-/* Interactive Cursor Spotlight Glow */
-.cursor-glow {
+.aurora-overlay {
   position: absolute;
-  width: 650px;
-  height: 650px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.16) 0%, rgba(168, 85, 247, 0.08) 35%, transparent 70%);
-  transform: translate(-50%, -50%);
+  inset: 0;
+  background: radial-gradient(circle at 50% 32%, transparent 35%, rgba(6, 8, 14, 0.75) 90%),
+              linear-gradient(to bottom, transparent 65%, rgba(6, 8, 14, 0.85) 100%);
   pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.08s ease-out;
-  opacity: 0;
-  z-index: 3;
-  mix-blend-mode: screen;
-}
-
-/* Luminous Cyber Laser Beams traveling on grid lines */
-.grid-beam {
-  position: absolute;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.beam-horizontal {
-  height: 1.5px;
-  width: 320px;
-  background: linear-gradient(90deg, transparent, #818cf8, #c084fc, transparent);
-  box-shadow: 0 0 14px #818cf8, 0 0 28px #c084fc;
-  animation: beamScanH 14s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  top: 26%;
-  opacity: 0.75;
-}
-
-.beam-vertical {
-  width: 1.5px;
-  height: 380px;
-  background: linear-gradient(180deg, transparent, #06b6d4, #6366f1, transparent);
-  box-shadow: 0 0 14px #06b6d4, 0 0 28px #6366f1;
-  animation: beamScanV 18s cubic-bezier(0.4, 0, 0.2, 1) infinite 4s;
-  left: 22%;
-  opacity: 0.7;
-}
-
-@keyframes beamScanH {
-  0% { left: -350px; top: 22%; opacity: 0; }
-  12% { opacity: 0.85; }
-  50% { left: 105vw; top: 38%; opacity: 0.85; }
-  51% { opacity: 0; }
-  100% { left: 105vw; opacity: 0; }
-}
-
-@keyframes beamScanV {
-  0% { top: -420px; left: 78%; opacity: 0; }
-  12% { opacity: 0.85; }
-  50% { top: 105vh; left: 32%; opacity: 0.85; }
-  51% { opacity: 0; }
-  100% { top: 105vh; opacity: 0; }
-}
-
-/* Floating Ambient Gradient Orbs with Multi-axis Lissajous Drift */
-.ambient-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  mix-blend-mode: screen;
-  will-change: transform, opacity;
   z-index: 1;
-}
-
-.orb-1 {
-  width: 680px;
-  height: 680px;
-  background: radial-gradient(circle, #6366f1 0%, #4338ca 45%, transparent 70%);
-  top: -160px;
-  left: 45%;
-  opacity: 0.42;
-  animation: orbDrift1 16s ease-in-out infinite alternate;
-}
-
-.orb-2 {
-  width: 580px;
-  height: 580px;
-  background: radial-gradient(circle, #a855f7 0%, #7e22ce 45%, transparent 70%);
-  top: 32%;
-  right: -90px;
-  opacity: 0.38;
-  animation: orbDrift2 20s ease-in-out infinite alternate;
-}
-
-.orb-3 {
-  width: 520px;
-  height: 520px;
-  background: radial-gradient(circle, #06b6d4 0%, #0891b2 45%, transparent 70%);
-  bottom: 8%;
-  left: -120px;
-  opacity: 0.36;
-  animation: orbDrift3 24s ease-in-out infinite alternate;
-}
-
-.orb-4 {
-  width: 480px;
-  height: 480px;
-  background: radial-gradient(circle, #ec4899 0%, #be185d 45%, transparent 70%);
-  top: 60%;
-  left: 42%;
-  opacity: 0.28;
-  animation: orbDrift4 22s ease-in-out infinite alternate;
-}
-
-@keyframes orbDrift1 {
-  0% { transform: translate(-50%, 0) scale(1) rotate(0deg); opacity: 0.38; }
-  50% { transform: translate(-35%, 90px) scale(1.18) rotate(45deg); opacity: 0.52; }
-  100% { transform: translate(-65%, 45px) scale(0.92) rotate(-30deg); opacity: 0.36; }
-}
-
-@keyframes orbDrift2 {
-  0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.34; }
-  50% { transform: translateY(-80px) translateX(-60px) scale(1.22); opacity: 0.5; }
-  100% { transform: translateY(90px) translateX(40px) scale(0.88); opacity: 0.32; }
-}
-
-@keyframes orbDrift3 {
-  0% { transform: translate(0, 0) scale(1); opacity: 0.32; }
-  50% { transform: translate(90px, -70px) scale(1.16); opacity: 0.52; }
-  100% { transform: translate(-50px, 60px) scale(0.94); opacity: 0.3; }
-}
-
-@keyframes orbDrift4 {
-  0% { transform: translate(-50%, 0) scale(0.85); opacity: 0.22; }
-  50% { transform: translate(-30%, -70px) scale(1.25); opacity: 0.45; }
-  100% { transform: translate(-70%, 50px) scale(0.9); opacity: 0.24; }
 }
 
 /* App Wrapper */
