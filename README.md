@@ -6,12 +6,14 @@
 
 ### Local-First AI Product Demo Generator — Turn Any Website URL into a Polished Video
 
-**A real, native Windows desktop application built with Tauri 2, Rust, React, and Playwright** — Clipwise crawls your web application, discovers key features and interactive workflows, plans cinematic demo scenes using local Ollama LLMs or deterministic heuristic fallbacks, records browser interactions, and renders studio-quality MP4 demo videos using FFmpeg.
+**A real, native Windows desktop application built with Tauri 2, Rust, React, and Playwright** — Clipwise crawls your web application, discovers key features and interactive workflows, plans cinematic demo scenes using local Ollama LLMs or deterministic heuristic fallbacks, records browser interactions with natural human Bezier mouse movements, and renders studio-quality MP4 demo videos using FFmpeg.
 
 **100% Local-First** · **Zero Cloud API Subscriptions** · **Your Data Stays on Your Machine**
 
 <br/>
 
+[![Latest Release](https://img.shields.io/github/v/release/jojin1709/Clipwise?style=flat-square&labelColor=0D1117&color=6366F1)](https://github.com/jojin1709/Clipwise/releases/latest)
+[![Live Website](https://img.shields.io/badge/Website-Live%20Demo-0D1117?style=flat-square&labelColor=0D1117&color=6366F1)](https://jojin1709.github.io/Clipwise/)
 [![License](https://img.shields.io/badge/License-MIT-0D1117?style=flat-square&labelColor=0D1117&color=6366F1)](LICENSE)
 [![Tauri](https://img.shields.io/badge/Tauri-v2.8-0D1117?style=flat-square&labelColor=0D1117&logo=tauri&logoColor=24C8DB)](https://v2.tauri.app/)
 [![Rust](https://img.shields.io/badge/Rust-2021%20Edition-0D1117?style=flat-square&labelColor=0D1117&logo=rust&logoColor=DEA584)](https://www.rust-lang.org/)
@@ -23,6 +25,10 @@
 
 <br/>
 
+[**🌐 Live Website & Interactive Demo**](https://jojin1709.github.io/Clipwise/) &nbsp;•&nbsp; [**📥 Download Latest Windows (.exe)**](https://github.com/jojin1709/Clipwise/releases/latest) &nbsp;•&nbsp; [**📖 Documentation**](https://jojin1709.github.io/Clipwise/#demo)
+
+<br/>
+
 **Developed by [JOJIN JOHN](https://github.com/jojin1709)**
 
 <br/>
@@ -31,19 +37,31 @@
 
 ---
 
-## ⚡ What is Clipwise?
+## What is Clipwise?
 
-Traditional product demo video creation requires hours of screen recording, video editing software, and expensive cloud subscriptions. **Clipwise** automates the entire pipeline directly on your Windows PC:
+Traditional product demo video creation requires hours of manual screen recording, video editing software, and expensive cloud subscriptions. **Clipwise** automates the entire pipeline directly on your Windows PC:
 
-1. **Automated Deep Crawl & Exploration** — Headless/Headed Chromium via Playwright navigates target sites up to configurable depths, capturing screenshots, DOM states, navigation trees, and call-to-actions.
-2. **Intelligent Feature Discovery** — Discovers search bars, dashboards, auth screens, CTAs, navigation structures, and data displays with confidence ratings and semantic scoring.
+1. **Automated Deep Crawl & Exploration** — Headless/Headed Chromium via Playwright navigates target sites up to configurable depths, capturing screenshots, DOM states, navigation trees, and interactive tool buttons.
+2. **Intelligent Feature Discovery** — Discovers search bars, dashboards, auth screens, CTAs, converters, navigation structures, and data displays with confidence ratings and semantic scoring.
 3. **AI Scene & Script Planning** — Leverages your local Ollama instance (e.g. `qwen2.5:3b`, `llama3.2`, `mistral`) to structure a multi-scene showcase with timings and narration script. Includes a robust deterministic fallback planner if Ollama is not running.
-4. **Automated Interaction Recording** — Executes the scripted plan step-by-step in an isolated Playwright browser context, capturing high-framerate video recordings.
+4. **Autonomous Interaction Recording** — Simulates authentic human exploration with natural Bezier mouse trajectories, realistic text typing cadence, button click ripples, and an in-video lower-third status HUD.
 5. **Hardware-Accelerated Video Rendering** — Compiles, transcode, and exports the final video to clean H.264 MP4 with FFmpeg, ready for your landing page, YouTube, X, or pitch deck.
 
 ---
 
-## 💻 System Requirements & Specifications
+## Downloads
+
+Official standalone builds are compiled for Windows 10 & 11 (64-bit):
+
+| Package | Type | Description | Link |
+| :--- | :--- | :--- | :--- |
+| **Windows Installer** | `.exe` (NSIS) | Full desktop setup with Start Menu, Desktop shortcut & auto-updater | [**Download Setup (.exe)**](https://github.com/jojin1709/Clipwise/releases/latest) |
+| **Portable Executable** | `.exe` | Standalone binary. Zero install required — run from any folder or USB | [**Download Portable (.exe)**](https://github.com/jojin1709/Clipwise/releases/latest) |
+| **Enterprise MSI** | `.msi` | Standard Windows Installer package for managed IT & silent deployment | [**Download MSI (.msi)**](https://github.com/jojin1709/Clipwise/releases/latest) |
+
+---
+
+## System Requirements & Specifications
 
 Clipwise runs natively on Windows 10 and Windows 11. Below are the minimum hardware requirements and optimal hardware recommendations for running browser automation, local AI models, and video rendering simultaneously.
 
@@ -60,7 +78,7 @@ Clipwise runs natively on Windows 10 and Windows 11. Below are the minimum hardw
 
 ---
 
-## 🛠️ Architecture & Technology Stack
+## Architecture & Technology Stack
 
 ```
 Clipwise/
@@ -83,7 +101,7 @@ Clipwise/
 ├── packages/
 │   └── shared/                  # Shared TypeScript Interfaces, Types, and Schemas
 ├── scripts/                     # Dev Orchestration & Cross-Process Lifecycle Scripts
-└── docs/                        # Windows Setup & Environment Guides
+└── docs/                        # Interactive Web Documentation & Live Showcase Page (GitHub Pages)
 ```
 
 ### Complete Pipeline Flow
@@ -115,7 +133,7 @@ Clipwise/
 
 ---
 
-## 🛡️ Security & SSRF Protection
+## Security & SSRF Protection
 
 Clipwise is engineered with defense-in-depth security standards:
 - **SSRF Prevention**: By default, Clipwise actively resolves domain names and blocks requests targeting `127.0.0.1`, loopback aliases, RFC 1918 private subnets (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`), and IPv6 private addresses.
@@ -126,7 +144,7 @@ Clipwise is engineered with defense-in-depth security standards:
 
 ---
 
-## 🚀 Quick Start (Windows)
+## Quick Start (Windows)
 
 ### Prerequisites
 
@@ -174,7 +192,7 @@ The installer (`.msi` and `.exe`) will be generated in `apps/desktop/src-tauri/t
 
 ---
 
-## 🤖 Optional: Local AI with Ollama
+## Optional: Local AI with Ollama
 
 Clipwise works 100% out of the box using built-in deterministic planning. To enable AI-written showcase scripts:
 
@@ -190,7 +208,7 @@ Clipwise works 100% out of the box using built-in deterministic planning. To ena
 
 ---
 
-## 💖 Sponsor & Support
+## Sponsor & Support
 
 Clipwise is free and open-source software crafted with passion by **JOJIN JOHN**.
 
@@ -208,7 +226,7 @@ If you find Clipwise useful for your workflow, indie projects, or enterprise dem
 
 ---
 
-## 👨‍💻 Developed By
+## Developed By
 
 **JOJIN JOHN**
 - GitHub: [@jojin1709](https://github.com/jojin1709)
@@ -216,6 +234,6 @@ If you find Clipwise useful for your workflow, indie projects, or enterprise dem
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
