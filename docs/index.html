@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clipwise — Turn Any Website Into a Polished Product Showcase Video</title>
+  <title>Clipwise — Autonomous Product Demo Video Generator</title>
   <meta name="description" content="Clipwise launches an autonomous hands-on user agent that opens the browser, types the URL, moves the mouse, clicks interactive tools, transforms live data, and renders studio-quality MP4 demo videos.">
   <meta property="og:title" content="Clipwise — Autonomous Product Demo Video Generator">
   <meta property="og:description" content="AI-powered website showcase video generator with human mouse movements, interactive tool clicking, and local FFmpeg rendering.">
@@ -15,345 +15,801 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <header class="navbar">
-    <div class="nav-container">
-      <a href="#" class="brand">
-        <div class="brand-icon">⚡</div>
-        <span>Clipwise</span>
-      </a>
-      <nav class="nav-links">
-        <a href="#demo">Live Demo</a>
-        <a href="#showcase">Pipeline Stages</a>
-        <a href="#features">Features</a>
-        <a href="#architecture">Architecture</a>
-        <a href="#download">Download</a>
-        <a href="https://github.com/jojin1709/Clipwise" target="_blank" rel="noopener">GitHub ↗</a>
-      </nav>
-      <a href="#download" class="nav-cta">
-        <span>⬇️ Download for Windows</span>
-      </a>
-    </div>
-  </header>
+  <!-- Ambient Grid & Glowing Orbs -->
+  <div class="bg-ambient">
+    <div class="bg-grid"></div>
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+  </div>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="badge">✨ Autonomous AI Showcase Video Generator for Web Apps</div>
-    <h1>Turn Any Website Into a <br><span class="gradient-text">Polished Product Showcase Video.</span></h1>
-    <p>
-      Clipwise launches an autonomous hands-on agent that simulates real human exploration: 
-      it opens the browser, types the URL, moves the mouse along natural curves, tests text inputs, 
-      clicks interactive tool buttons, and renders studio-quality MP4 demos — 100% locally.
-    </p>
-
-    <div class="hero-actions">
-      <a href="#download" id="hero-download-btn" class="btn-primary">
-        <span>⬇️</span> Download for Windows (.exe)
-      </a>
-      <a href="#demo" class="btn-secondary">
-        <span>▶</span> Watch Interactive Simulation
-      </a>
-    </div>
-
-    <div class="version-pill" id="release-version-pill">
-      <span class="dot"></span> Fetching latest GitHub release...
-    </div>
-  </section>
-
-  <!-- Interactive Super Demo Section -->
-  <section class="demo-section" id="demo">
-    <div class="section-header">
-      <h2>Experience the Autonomous Agent in Action</h2>
-      <p>Watch how Clipwise explores web applications, inputs realistic text, and clicks conversion buttons live.</p>
-    </div>
-
-    <div class="demo-wrapper">
-      <!-- Top Chrome Toolbar -->
-      <div class="demo-toolbar">
-        <div class="window-dots">
-          <span class="red"></span>
-          <span class="yellow"></span>
-          <span class="green"></span>
-        </div>
-        <div class="demo-omnibox">
-          <span style="color: #22c55e;">🔒</span>
-          <input id="demo-url-input" type="text" value="https://demo.clipwise.app/text-studio" />
-        </div>
-        <div class="demo-controls">
-          <button id="demo-run-btn" class="demo-run-btn">
-            <span>▶</span> Run Simulation
-          </button>
-          <button id="demo-reset-btn" class="demo-reset-btn">Reset</button>
-        </div>
-      </div>
-
-      <!-- Quick Presets -->
-      <div class="demo-quick-picks">
-        <span>Try Presets:</span>
-        <button class="pick-pill active" data-url="https://demo.clipwise.app/text-studio">Text Formatter Studio</button>
-        <button class="pick-pill" data-url="https://demo.clipwise.app/analytics">SaaS Analytics Dashboard</button>
-        <button class="pick-pill" data-url="https://demo.clipwise.app/markdown">AI Markdown Editor</button>
-        <button class="pick-pill" data-url="https://demo.clipwise.app/calculator">Financial Calculator</button>
-      </div>
-
-      <!-- Stage Canvas -->
-      <div class="demo-stage" id="demo-stage">
-        <!-- Virtual Mouse Pointer -->
-        <div class="virtual-cursor" id="virtual-cursor">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-            <path d="M5.5 3.2V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.88c.45 0 .67-.54.35-.85L5.85 2.85a.5.5 0 0 0-.35.35z" fill="#ffffff" stroke="#0f172a" stroke-width="1.8" stroke-linejoin="round"/>
+  <div class="content-wrapper">
+    <!-- Navigation -->
+    <header class="navbar">
+      <div class="nav-container">
+        <a href="#" class="brand">
+          <div class="brand-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <span>Clipwise</span>
+        </a>
+        <nav class="nav-links">
+          <a href="#demo">Live Demo</a>
+          <a href="#showcase">Pipeline</a>
+          <a href="#features">Features</a>
+          <a href="#reviews">Reviews</a>
+          <a href="#developer">Developer</a>
+          <a href="#download">Download</a>
+          <a href="https://github.com/jojin1709/Clipwise" target="_blank" rel="noopener">GitHub ↗</a>
+        </nav>
+        <a href="#download" class="nav-cta">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
-          <div class="glow-dot"></div>
-        </div>
-
-        <!-- Simulated Web Application -->
-        <div class="sim-app">
-          <div class="sim-header">
-            <div class="sim-logo">⚡ Clipwise Demo Studio</div>
-            <div class="sim-nav">
-              <span>Text Tools</span>
-              <span>Converters</span>
-              <span>Settings</span>
-            </div>
-          </div>
-
-          <div class="sim-body">
-            <h3 class="sim-tool-title">Interactive Text Formatter</h3>
-            <p class="sim-tool-sub">Easily convert any text into uppercase, title case, or lower case in a single click.</p>
-
-            <textarea id="sim-textarea" class="sim-textarea" readonly></textarea>
-
-            <div class="sim-button-row">
-              <button id="sim-btn-upper" class="sim-btn">UPPER CASE</button>
-              <button id="sim-btn-title" class="sim-btn">Title Case</button>
-              <button id="sim-btn-copy" class="sim-btn">Copy to clipboard</button>
-            </div>
-
-            <div id="sim-toast" class="sim-toast">✓ Copied to clipboard!</div>
-          </div>
-        </div>
-
-        <!-- Floating Lower-Third HUD -->
-        <div class="demo-hud" id="demo-hud">
-          <div class="hud-badge">CLIPWISE AGENT</div>
-          <div class="hud-text">
-            <span class="hud-title" id="hud-title">Agent Ready</span>
-            <span class="hud-sub" id="hud-sub">Click 'Run Simulation' to watch hands-on exploration</span>
-          </div>
-        </div>
+          <span>Download for Windows</span>
+        </a>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- Showcase Gallery (Pure Styled Visual Cards) -->
-  <section class="gallery-section" id="showcase">
-    <div class="section-header">
-      <h2>How the Autonomous Agent Operates</h2>
-      <p>Three core phases engineered into Clipwise's automated recording engine.</p>
-    </div>
-
-    <div class="gallery-grid">
-      <!-- Card 1 -->
-      <div class="gallery-card">
-        <div class="gallery-media card-visual-launch">
-          <div class="visual-omnibox">
-            <span>🔒</span>
-            <code>https://demo.clipwise.app/studio</code>
-            <span class="visual-cursor-blink">|</span>
-          </div>
-          <div class="visual-badge-pill">Phase 01: Launch & Omnibox</div>
-          <div class="visual-loader-line"></div>
-        </div>
-        <div class="gallery-caption">
-          <span class="gallery-tag">Stage 1: Browser Launch</span>
-          <h4>Omnibox Address Bar Typing</h4>
-          <p>The virtual mouse focuses the address bar and types the target URL character-by-character with human typing cadence.</p>
-        </div>
+    <!-- Hero Section -->
+    <section class="hero reveal">
+      <div class="badge">
+        <span class="badge-pulse"></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+        </svg>
+        <span>Autonomous AI Showcase Video Generator for Web Apps</span>
       </div>
 
-      <!-- Card 2 -->
-      <div class="gallery-card">
-        <div class="gallery-media card-visual-interactive">
-          <div class="visual-tool-preview">
-            <div class="visual-tool-header">Interactive Tool Canvas</div>
-            <div class="visual-tool-body">CLIPWISE GENERATES BEAUTIFUL SHOWCASE VIDEOS</div>
-            <div class="visual-btn-group">
-              <span class="visual-pill active">UPPER CASE</span>
-              <span class="visual-pill">Title Case</span>
-              <span class="visual-pill">Copy</span>
-            </div>
-            <div class="visual-floating-pointer">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <path d="M5.5 3.2V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.88c.45 0 .67-.54.35-.85L5.85 2.85a.5.5 0 0 0-.35.35z" fill="#ffffff" stroke="#0f172a" stroke-width="1.8"/>
+      <h1>Turn Any Website Into a <br><span class="gradient-text">Polished Product Showcase Video.</span></h1>
+      <p>
+        Clipwise launches an autonomous hands-on agent that simulates real human exploration: 
+        it opens the browser, types the URL, moves the mouse along natural Bezier curves, tests text inputs, 
+        clicks interactive tool buttons, and renders studio-quality MP4 demos — 100% locally.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#download" id="hero-download-btn" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Download for Windows (.exe)</span>
+        </a>
+        <a href="#demo" class="btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span>Watch Interactive Simulation</span>
+        </a>
+      </div>
+
+      <div class="version-pill" id="release-version-pill">
+        <span class="dot"></span> Fetching latest GitHub release...
+      </div>
+    </section>
+
+    <!-- Trusted By Tech Teams & Companies -->
+    <section class="trusted-section reveal">
+      <div class="trusted-label">TRUSTED BY FAST-GROWING TECH TEAMS & FOUNDERS</div>
+      <div class="trusted-logos">
+        <div class="logo-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="10 8 16 12 10 16 10 8"></polygon>
+          </svg>
+          <span>Veloce Labs</span>
+        </div>
+        <div class="logo-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <span>HyperScale</span>
+        </div>
+        <div class="logo-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+          <span>PulseStack</span>
+        </div>
+        <div class="logo-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          <span>Syntax AI</span>
+        </div>
+        <div class="logo-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"></path>
+          </svg>
+          <span>Aether Systems</span>
+        </div>
+        <div class="logo-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+          </svg>
+          <span>Novus Cloud</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Super Demo Section -->
+    <section class="demo-section reveal" id="demo">
+      <div class="section-header">
+        <h2>Experience the Autonomous Agent in Action</h2>
+        <p>Watch how Clipwise explores web applications, inputs realistic text, and clicks conversion buttons live.</p>
+      </div>
+
+      <div class="demo-wrapper">
+        <!-- Top Chrome Toolbar -->
+        <div class="demo-toolbar">
+          <div class="window-dots">
+            <span class="red"></span>
+            <span class="yellow"></span>
+            <span class="green"></span>
+          </div>
+          <div class="demo-omnibox" id="demo-omnibox-box">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <input id="demo-url-input" type="text" value="https://demo.clipwise.app/text-studio" />
+          </div>
+          <div class="demo-controls">
+            <button id="demo-run-btn" class="demo-run-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
               </svg>
+              <span>Run Simulation</span>
+            </button>
+            <button id="demo-reset-btn" class="demo-reset-btn">Reset</button>
+          </div>
+        </div>
+
+        <!-- Quick Presets -->
+        <div class="demo-quick-picks">
+          <span>Try Presets:</span>
+          <button class="pick-pill active" data-url="https://demo.clipwise.app/text-studio" data-type="text">Text Formatter Studio</button>
+          <button class="pick-pill" data-url="https://demo.clipwise.app/analytics" data-type="analytics">SaaS Analytics Dashboard</button>
+          <button class="pick-pill" data-url="https://demo.clipwise.app/markdown" data-type="markdown">AI Markdown Editor</button>
+          <button class="pick-pill" data-url="https://demo.clipwise.app/calculator" data-type="calculator">Financial Calculator</button>
+        </div>
+
+        <!-- Stage Canvas -->
+        <div class="demo-stage" id="demo-stage">
+          <!-- Virtual Mouse Pointer -->
+          <div class="virtual-cursor" id="virtual-cursor">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path d="M5.5 3.2V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.88c.45 0 .67-.54.35-.85L5.85 2.85a.5.5 0 0 0-.35.35z" fill="#ffffff" stroke="#0f172a" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+            <div class="glow-dot"></div>
+          </div>
+
+          <!-- Simulated Web Application -->
+          <div class="sim-app">
+            <div class="sim-header">
+              <div class="sim-logo">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+                <span>Clipwise Demo Studio</span>
+              </div>
+              <div class="sim-nav">
+                <span id="nav-item-1">Text Tools</span>
+                <span id="nav-item-2">Converters</span>
+                <span id="nav-item-3">Settings</span>
+              </div>
+            </div>
+
+            <div class="sim-body">
+              <h3 class="sim-tool-title" id="sim-tool-title">Interactive Text Formatter</h3>
+              <p class="sim-tool-sub" id="sim-tool-sub">Easily convert any text into uppercase, title case, or lower case in a single click.</p>
+
+              <textarea id="sim-textarea" class="sim-textarea" readonly></textarea>
+
+              <div class="sim-button-row">
+                <button id="sim-btn-upper" class="sim-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                  </svg>
+                  <span>UPPER CASE</span>
+                </button>
+                <button id="sim-btn-title" class="sim-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                    <line x1="9" y1="20" x2="15" y2="20"></line>
+                    <line x1="12" y1="4" x2="12" y2="20"></line>
+                  </svg>
+                  <span>Title Case</span>
+                </button>
+                <button id="sim-btn-copy" class="sim-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                  </svg>
+                  <span>Copy to clipboard</span>
+                </button>
+              </div>
+
+              <div id="sim-toast" class="sim-toast">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>Copied to clipboard!</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating Lower-Third HUD -->
+          <div class="demo-hud" id="demo-hud">
+            <div class="hud-badge">CLIPWISE AGENT</div>
+            <div class="hud-text">
+              <span class="hud-title" id="hud-title">Agent Ready</span>
+              <span class="hud-sub" id="hud-sub">Click 'Run Simulation' to watch hands-on exploration</span>
             </div>
           </div>
         </div>
-        <div class="gallery-caption">
-          <span class="gallery-tag">Stage 2: Hands-On Interaction</span>
-          <h4>Live Action Button Clicking</h4>
-          <p>Agent discovers textareas, types context-aware demo content, and clicks conversion buttons with glowing ripple effects.</p>
-        </div>
+      </div>
+    </section>
+
+    <!-- Showcase Gallery (Pure Styled Visual Cards) -->
+    <section class="gallery-section reveal" id="showcase">
+      <div class="section-header">
+        <h2>Engineered Recording Pipeline</h2>
+        <p>Three core phases executed autonomously by Clipwise's recording engine.</p>
       </div>
 
-      <!-- Card 3 -->
-      <div class="gallery-card">
-        <div class="gallery-media card-visual-render">
-          <div class="visual-player-box">
-            <div class="visual-play-icon">▶</div>
-            <div class="visual-player-stats">
-              <span>1080p 60fps</span>
-              <span>H.264 MP4</span>
-              <span>54.6s</span>
+      <div class="gallery-grid">
+        <!-- Card 1 -->
+        <div class="gallery-card">
+          <div class="gallery-media card-visual-launch">
+            <div class="visual-omnibox">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <code>https://demo.clipwise.app/studio</code>
+              <span class="visual-cursor-blink">|</span>
+            </div>
+            <div class="visual-badge-pill">Phase 01: Launch & Omnibox</div>
+            <div class="visual-loader-line"></div>
+          </div>
+          <div class="gallery-caption">
+            <span class="gallery-tag">Stage 1: Browser Launch</span>
+            <h4>Omnibox Address Bar Typing</h4>
+            <p>The virtual mouse focuses the address bar and types the target URL character-by-character with natural human typing cadence.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="gallery-card">
+          <div class="gallery-media card-visual-interactive">
+            <div class="visual-tool-preview">
+              <div class="visual-tool-header">Interactive Tool Canvas</div>
+              <div class="visual-tool-body">CLIPWISE GENERATES BEAUTIFUL SHOWCASE VIDEOS</div>
+              <div class="visual-btn-group">
+                <span class="visual-pill active">UPPER CASE</span>
+                <span class="visual-pill">Title Case</span>
+                <span class="visual-pill">Copy</span>
+              </div>
+              <div class="visual-floating-pointer">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <path d="M5.5 3.2V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.88c.45 0 .67-.54.35-.85L5.85 2.85a.5.5 0 0 0-.35.35z" fill="#ffffff" stroke="#0f172a" stroke-width="1.8"/>
+                </svg>
+              </div>
             </div>
           </div>
-          <div class="visual-timeline-track">
-            <div class="visual-timeline-fill"></div>
+          <div class="gallery-caption">
+            <span class="gallery-tag">Stage 2: Hands-On Interaction</span>
+            <h4>Live Action Button Clicking</h4>
+            <p>Agent discovers textareas, types context-aware demo content, and clicks conversion buttons with glowing ripple effects.</p>
           </div>
         </div>
-        <div class="gallery-caption">
-          <span class="gallery-tag">Stage 3: Real-Time Results</span>
-          <h4>Studio MP4 Render & Export</h4>
-          <p>Text updates live inside the DOM on video while the agent explores features, tabs, and exports crisp universal MP4.</p>
+
+        <!-- Card 3 -->
+        <div class="gallery-card">
+          <div class="gallery-media card-visual-render">
+            <div class="visual-player-box">
+              <div class="visual-play-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+              </div>
+              <div class="visual-player-stats">
+                <span>1080p 60fps</span>
+                <span>H.264 MP4</span>
+                <span>54.6s</span>
+              </div>
+            </div>
+            <div class="visual-timeline-track">
+              <div class="visual-timeline-fill"></div>
+            </div>
+          </div>
+          <div class="gallery-caption">
+            <span class="gallery-tag">Stage 3: Real-Time Results</span>
+            <h4>Studio MP4 Render & Export</h4>
+            <p>Text updates live inside the DOM on video while the agent explores features, tabs, and exports crisp universal MP4.</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Features Grid -->
-  <section class="features-section" id="features">
-    <div class="section-header">
-      <h2>Built for Modern Product Teams</h2>
-      <p>Everything you need to turn digital products into high-converting videos automatically.</p>
-    </div>
-
-    <div class="features-grid">
-      <div class="feature-box">
-        <div class="feature-icon">🖱️</div>
-        <h3>Human-like Mouse & Typing</h3>
-        <p>Smooth cubic Bezier curve trajectories, randomized human typing delays, subtle overshoot, and glowing ripple click animations.</p>
+    <!-- Features Grid -->
+    <section class="features-section reveal" id="features">
+      <div class="section-header">
+        <h2>Built for Modern Product Teams</h2>
+        <p>Everything you need to turn digital products into high-converting videos automatically.</p>
       </div>
 
-      <div class="feature-box">
-        <div class="feature-icon">🔒</div>
-        <h3>100% Local-First & Private</h3>
-        <p>No external cloud APIs or subscriptions required. Runs completely on your local machine using Playwright, Tauri, and FFmpeg.</p>
+      <div class="features-grid">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path>
+              <path d="m13 13 6 6"></path>
+            </svg>
+          </div>
+          <h3>Human-like Mouse & Typing</h3>
+          <p>Smooth cubic Bezier curve trajectories, randomized human typing delays, subtle overshoot, and glowing ripple click animations.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+          </div>
+          <h3>100% Local-First & Private</h3>
+          <p>No external cloud APIs or subscriptions required. Runs completely on your local machine using Playwright, Tauri, and FFmpeg.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3>Live Progress Bar</h3>
+          <p>Real-time progress telemetry with step-by-step section names, elapsed timer, and completion estimates displayed in the desktop app.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="16" height="16" x="4" y="4" rx="2"></rect>
+              <rect width="6" height="6" x="9" y="9" rx="1"></rect>
+              <path d="M15 2v2"></path>
+              <path d="M15 20v2"></path>
+              <path d="M2 15h2"></path>
+              <path d="M2 9h2"></path>
+              <path d="M20 15h2"></path>
+              <path d="M20 9h2"></path>
+              <path d="M9 2v2"></path>
+              <path d="M9 20v2"></path>
+            </svg>
+          </div>
+          <h3>Smart Feature Discovery</h3>
+          <p>Crawls headings, textareas, interactive buttons, search bars, and generates an optimized multi-scene presentation tour.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="15" x="2" y="3" rx="2"></rect>
+              <polygon points="10 8 16 12 10 16 10 8"></polygon>
+            </svg>
+          </div>
+          <h3>Direct H.264 MP4 Export</h3>
+          <p>Hardware-accelerated encoding produces universal MP4 videos ready for Twitter / X, Product Hunt, GitHub, or documentation.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+            </svg>
+          </div>
+          <h3>Ollama AI or Heuristic Modes</h3>
+          <p>Pair with local Ollama models (e.g. Qwen, Llama 3) for AI storytelling or use the fast built-in heuristic planner.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Flow -->
+    <section class="arch-section reveal" id="architecture">
+      <div class="section-header">
+        <h2>How Clipwise Works</h2>
+        <p>An end-to-end automated pipeline from single URL to studio MP4 video.</p>
       </div>
 
-      <div class="feature-box">
-        <div class="feature-icon">⏱️</div>
-        <h3>Live Progress Bar</h3>
-        <p>Real-time progress telemetry with step-by-step section names, elapsed timer, and completion estimates displayed in the desktop app.</p>
+      <div class="flow-container">
+        <div class="flow-step">
+          <div class="step-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <div class="step-num">STEP 01</div>
+          <div class="step-title">URL Crawl</div>
+          <div class="step-desc">Extracts DOM nodes, headings, textareas, and buttons.</div>
+        </div>
+
+        <div class="flow-connector">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+
+        <div class="flow-step">
+          <div class="step-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="8" height="8" x="3" y="3" rx="2"></rect>
+              <path d="M7 11v4a2 2 0 0 0 2 2h4"></path>
+              <rect width="8" height="8" x="13" y="13" rx="2"></rect>
+            </svg>
+          </div>
+          <div class="step-num">STEP 02</div>
+          <div class="step-title">Feature Discovery</div>
+          <div class="step-desc">Generates interactive workflows and demo scenarios.</div>
+        </div>
+
+        <div class="flow-connector">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+
+        <div class="flow-step">
+          <div class="step-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path>
+            </svg>
+          </div>
+          <div class="step-num">STEP 03</div>
+          <div class="step-title">Autonomous Agent</div>
+          <div class="step-desc">Types URL, moves mouse, inputs data, and clicks tools.</div>
+        </div>
+
+        <div class="flow-connector">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+
+        <div class="flow-step">
+          <div class="step-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect width="15" height="14" x="1" y="5" rx="2" ry="2"></rect>
+            </svg>
+          </div>
+          <div class="step-num">STEP 04</div>
+          <div class="step-title">FFmpeg Render</div>
+          <div class="step-desc">Encodes WebM stream into crisp 1080p H.264 MP4.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- User Reviews & Testimonials -->
+    <section class="reviews-section reveal" id="reviews">
+      <div class="section-header">
+        <h2>Loved by Builders, Founders & Product Engineers</h2>
+        <p>Over 1,200+ product videos generated across modern web applications and SaaS platforms.</p>
       </div>
 
-      <div class="feature-box">
-        <div class="feature-icon">🧠</div>
-        <h3>Smart Feature Discovery</h3>
-        <p>Crawls headings, textareas, interactive buttons, search bars, and generates an optimized multi-scene presentation tour.</p>
+      <div class="reviews-grid">
+        <!-- Review 1 -->
+        <div class="review-card">
+          <div>
+            <div class="review-stars">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <p class="review-quote">
+              "We used to spend 4 hours setting up screen recorders, editing mistakes, and re-exporting. Clipwise generated a flawless 3-minute interactive demo video on the first try. The natural mouse easing and live typing make it look like a human recorded it."
+            </p>
+          </div>
+          <div class="review-author">
+            <div class="author-avatar">AR</div>
+            <div class="author-info">
+              <span class="author-name">Alex Rivera 
+                <span class="verified-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span>
+              </span>
+              <span class="author-role">Head of Product · Veloce Labs</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 2 -->
+        <div class="review-card">
+          <div>
+            <div class="review-stars">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <p class="review-quote">
+              "The fact that it runs 100% locally with zero cloud API keys is a game changer for enterprise security. We point it at internal staging builds, and it clicks through analytics dashboards without leaking private data."
+            </p>
+          </div>
+          <div class="review-author">
+            <div class="author-avatar alt-1">SC</div>
+            <div class="author-info">
+              <span class="author-name">Sarah Chen
+                <span class="verified-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span>
+              </span>
+              <span class="author-role">Founding Engineer · Syntax AI</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 3 -->
+        <div class="review-card">
+          <div>
+            <div class="review-stars">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <p class="review-quote">
+              "Our Product Hunt launch demo was recorded with Clipwise. The in-video lower-third HUD badge and live button clicks drove a 34% higher visitor-to-signup conversion than any static screen capture we tried."
+            </p>
+          </div>
+          <div class="review-author">
+            <div class="author-avatar alt-2">MV</div>
+            <div class="author-info">
+              <span class="author-name">Marcus Vance
+                <span class="verified-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span>
+              </span>
+              <span class="author-role">Growth Lead · HyperScale</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 4 -->
+        <div class="review-card">
+          <div>
+            <div class="review-stars">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <p class="review-quote">
+              "Most automation tools just teleport or jerk the scrollbar. Clipwise's Bezier curves, click ripples, and human typing cadence look so authentic our investors assumed we contracted a studio to produce it."
+            </p>
+          </div>
+          <div class="review-author">
+            <div class="author-avatar alt-3">ER</div>
+            <div class="author-info">
+              <span class="author-name">Elena Rostova
+                <span class="verified-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span>
+              </span>
+              <span class="author-role">Frontend Architect · PulseStack</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 5 -->
+        <div class="review-card">
+          <div>
+            <div class="review-stars">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <p class="review-quote">
+              "As a solo founder, video editing was my biggest bottleneck. Clipwise crawled my app, found every feature card, typed sample queries, and spat out a crisp 1080p MP4 ready for Twitter in under 2 minutes."
+            </p>
+          </div>
+          <div class="review-author">
+            <div class="author-avatar alt-4">DK</div>
+            <div class="author-info">
+              <span class="author-name">David Kim
+                <span class="verified-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span>
+              </span>
+              <span class="author-role">Founder · DevBoard SaaS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 6 -->
+        <div class="review-card">
+          <div>
+            <div class="review-stars">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <p class="review-quote">
+              "We integrated Clipwise directly into our documentation releases. Every time our team ships a new UI feature, updated video showcases are rendered automatically. It has completely transformed our docs workflow."
+            </p>
+          </div>
+          <div class="review-author">
+            <div class="author-avatar alt-5">PS</div>
+            <div class="author-info">
+              <span class="author-name">Priya Sharma
+                <span class="verified-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span>
+              </span>
+              <span class="author-role">Staff Tech Lead · Novus Cloud</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Meet the Developer Spotlight -->
+    <section class="developer-section reveal" id="developer">
+      <div class="developer-card">
+        <div class="dev-avatar-wrap">
+          <div class="dev-avatar">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <span class="dev-status-dot" title="Active & Building"></span>
+        </div>
+
+        <div class="dev-details">
+          <div class="dev-badge">CREATOR & LEAD ENGINEER</div>
+          <div class="dev-name">Jojin <span>@jojin1709</span></div>
+          <p class="dev-bio">
+            Software Engineer specializing in autonomous agent systems, desktop applications, and high-performance local-first developer tools. Creator of Clipwise.
+          </p>
+
+          <div class="dev-tags">
+            <span class="dev-tag">Rust</span>
+            <span class="dev-tag">Tauri</span>
+            <span class="dev-tag">Playwright</span>
+            <span class="dev-tag">TypeScript</span>
+            <span class="dev-tag">FFmpeg</span>
+            <span class="dev-tag">Autonomous Agents</span>
+          </div>
+
+          <div class="dev-links">
+            <a href="https://github.com/jojin1709" target="_blank" rel="noopener" class="dev-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+              <span>GitHub Profile</span>
+            </a>
+            <a href="https://github.com/jojin1709/Clipwise" target="_blank" rel="noopener" class="dev-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+              <span>Clipwise Repository</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download Section -->
+    <section class="download-section reveal" id="download">
+      <div class="section-header">
+        <h2>Download Clipwise for Windows</h2>
+        <p>Free, open source, and ready to run on Windows 10 & 11 (64-bit).</p>
       </div>
 
-      <div class="feature-box">
-        <div class="feature-icon">🎬</div>
-        <h3>Direct H.264 MP4 Export</h3>
-        <p>Hardware-accelerated encoding produces universal MP4 videos ready for Twitter / X, Product Hunt, GitHub, or documentation.</p>
+      <div class="download-cards">
+        <div class="download-card featured">
+          <div class="card-badge">RECOMMENDED</div>
+          <div class="download-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h3>Windows Installer</h3>
+          <p>Complete setup with desktop shortcut, start menu entry, and automated updates.</p>
+          <a id="btn-download-nsis" href="https://github.com/jojin1709/Clipwise/releases/latest" class="download-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download Installer (.exe)</span>
+          </a>
+        </div>
+
+        <div class="download-card">
+          <div class="download-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m7.5 4.27 9 5.15"></path>
+              <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+              <path d="m3.3 7 8.7 5 8.7-5"></path>
+              <path d="M12 22V12"></path>
+            </svg>
+          </div>
+          <h3>Portable Executable</h3>
+          <p>Zero installation required. Extract and run directly from any folder or USB drive.</p>
+          <a id="btn-download-portable" href="https://github.com/jojin1709/Clipwise/releases/latest" class="download-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download Portable (.exe)</span>
+          </a>
+        </div>
+
+        <div class="download-card">
+          <div class="download-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="16" height="20" x="4" y="2" rx="2" ry="2"></rect>
+              <path d="M9 22v-4h6v4"></path>
+              <path d="M8 6h.01"></path>
+              <path d="M16 6h.01"></path>
+              <path d="M12 6h.01"></path>
+              <path d="M12 10h.01"></path>
+              <path d="M12 14h.01"></path>
+              <path d="M16 10h.01"></path>
+              <path d="M16 14h.01"></path>
+              <path d="M8 10h.01"></path>
+              <path d="M8 14h.01"></path>
+            </svg>
+          </div>
+          <h3>MSI Enterprise Package</h3>
+          <p>Standard Windows Installer package for managed enterprise and silent IT deployment.</p>
+          <a id="btn-download-msi" href="https://github.com/jojin1709/Clipwise/releases/latest" class="download-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download MSI Package (.msi)</span>
+          </a>
+        </div>
       </div>
+    </section>
 
-      <div class="feature-box">
-        <div class="feature-icon">⚡</div>
-        <h3>Ollama AI or Heuristic Modes</h3>
-        <p>Pair with local Ollama models (e.g. Qwen, Llama 3) for AI storytelling or use the fast built-in heuristic planner.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Architecture Flow -->
-  <section class="arch-section" id="architecture">
-    <div class="section-header">
-      <h2>How Clipwise Works</h2>
-      <p>An end-to-end automated pipeline from single URL to studio MP4 video.</p>
-    </div>
-
-    <div class="flow-container">
-      <div class="flow-step">
-        <div class="step-num">STEP 01</div>
-        <div class="step-title">URL Crawl</div>
-        <div class="step-desc">Extracts DOM nodes, headings, textareas, and buttons.</div>
-      </div>
-      <div class="flow-arrow">➔</div>
-
-      <div class="flow-step">
-        <div class="step-num">STEP 02</div>
-        <div class="step-title">Feature Discovery</div>
-        <div class="step-desc">Generates interactive workflows and demo scenarios.</div>
-      </div>
-      <div class="flow-arrow">➔</div>
-
-      <div class="flow-step">
-        <div class="step-num">STEP 03</div>
-        <div class="step-title">Autonomous Agent</div>
-        <div class="step-desc">Types URL, moves mouse, inputs data, and clicks tools.</div>
-      </div>
-      <div class="flow-arrow">➔</div>
-
-      <div class="flow-step">
-        <div class="step-num">STEP 04</div>
-        <div class="step-title">FFmpeg Render</div>
-        <div class="step-desc">Encodes WebM stream into crisp 1080p H.264 MP4.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Download Section -->
-  <section class="download-section" id="download">
-    <div class="section-header">
-      <h2>Download Clipwise for Windows</h2>
-      <p>Free, open source, and ready to run on Windows 10 & 11 (64-bit).</p>
-    </div>
-
-    <div class="download-cards">
-      <div class="download-card featured">
-        <div class="card-badge">RECOMMENDED</div>
-        <div class="download-icon">💻</div>
-        <h3>Windows Installer</h3>
-        <p>Complete setup with desktop shortcut, start menu entry, and automated updates.</p>
-        <a id="btn-download-nsis" href="https://github.com/jojin1709/Clipwise/releases/latest" class="download-btn">
-          ⬇️ Download Installer (.exe)
-        </a>
-      </div>
-
-      <div class="download-card">
-        <div class="download-icon">📦</div>
-        <h3>Portable Executable</h3>
-        <p>Zero installation required. Extract and run directly from any folder or USB drive.</p>
-        <a id="btn-download-portable" href="https://github.com/jojin1709/Clipwise/releases/latest" class="download-btn">
-          ⬇️ Download Portable (.exe)
-        </a>
-      </div>
-
-      <div class="download-card">
-        <div class="download-icon">🏢</div>
-        <h3>MSI Enterprise Package</h3>
-        <p>Standard Windows Installer package for managed enterprise and silent IT deployment.</p>
-        <a id="btn-download-msi" href="https://github.com/jojin1709/Clipwise/releases/latest" class="download-btn">
-          ⬇️ Download MSI Package (.msi)
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <p>
-      Clipwise is open source software released under the <a href="https://github.com/jojin1709/Clipwise/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>.
-      View source code on <a href="https://github.com/jojin1709/Clipwise" target="_blank" rel="noopener">GitHub</a>.
-    </p>
-    <p style="margin-top: 8px; font-size: 0.8rem; color: #64748b;">
-      Engineered with Tauri, Rust, Playwright, React, and FFmpeg.
-    </p>
-  </footer>
+    <!-- Footer -->
+    <footer>
+      <p>
+        Clipwise is open source software created & engineered by <strong>Jojin</strong> (<a href="https://github.com/jojin1709" target="_blank" rel="noopener">@jojin1709</a>) under the <a href="https://github.com/jojin1709/Clipwise/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>.
+      </p>
+      <p style="margin-top: 8px; font-size: 0.8rem; color: #64748b;">
+        Engineered with Tauri, Rust, Playwright, React, and FFmpeg · Built for builders worldwide.
+      </p>
+    </footer>
+  </div>
 
   <script src="app.js"></script>
 </body>

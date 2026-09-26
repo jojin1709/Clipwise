@@ -2,7 +2,25 @@
 document.addEventListener("DOMContentLoaded", () => {
   initGitHubReleaseDownloader();
   initInteractiveDemo();
+  initScrollReveal();
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
 });
+
+const DOWNLOAD_SVG = `
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+    <polyline points="7 10 12 15 17 10"></polyline>
+    <line x1="12" y1="15" x2="12" y2="3"></line>
+  </svg>
+`;
+
+const PLAY_SVG = `
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+  </svg>
+`;
 
 // 1. Fetch latest GitHub release assets (.exe, .msi, portable)
 async function initGitHubReleaseDownloader() {
@@ -38,29 +56,28 @@ async function initGitHubReleaseDownloader() {
     if (nsisAsset && btnNsis) {
       const sizeMb = (nsisAsset.size / (1024 * 1024)).toFixed(1);
       btnNsis.href = nsisAsset.browser_download_url;
-      btnNsis.innerHTML = `⬇️ Download Installer (.exe) <small style="opacity:0.75; font-size:11px;">(${sizeMb} MB)</small>`;
+      btnNsis.innerHTML = `${DOWNLOAD_SVG} <span>Download Installer (.exe)</span> <small style="opacity:0.75; font-size:11px;">(${sizeMb} MB)</small>`;
       if (heroDownloadBtn) heroDownloadBtn.href = nsisAsset.browser_download_url;
     } else if (portableAsset && btnNsis) {
       const sizeMb = (portableAsset.size / (1024 * 1024)).toFixed(1);
       btnNsis.href = portableAsset.browser_download_url;
-      btnNsis.innerHTML = `⬇️ Download .exe <small style="opacity:0.75; font-size:11px;">(${sizeMb} MB)</small>`;
+      btnNsis.innerHTML = `${DOWNLOAD_SVG} <span>Download .exe</span> <small style="opacity:0.75; font-size:11px;">(${sizeMb} MB)</small>`;
       if (heroDownloadBtn) heroDownloadBtn.href = portableAsset.browser_download_url;
     }
 
     if (portableAsset && btnPortable) {
       const sizeMb = (portableAsset.size / (1024 * 1024)).toFixed(1);
       btnPortable.href = portableAsset.browser_download_url;
-      btnPortable.innerHTML = `⬇️ Download Portable (.exe) <small style="opacity:0.75; font-size:11px;">(${sizeMb} MB)</small>`;
+      btnPortable.innerHTML = `${DOWNLOAD_SVG} <span>Download Portable (.exe)</span> <small style="opacity:0.75; font-size:11px;">(${sizeMb} MB)</small>`;
     }
 
     if (msiAsset && btnMsi) {
       const sizeMb = (msiAsset.size / (1024 * 1024)).toFixed(1);
       btnMsi.href = msiAsset.browser_download_url;
-      btnMsi.innerHTML = `⬇️ Download MSI Package (.msi) <small style="opacity:0.75; font-size:11px;">(${sizeMb} MB)</small>`;
+      btnMsi.innerHTML = `${DOWNLOAD_SVG} <span>Download MSI Package (.msi)</span> <small style="opacity:0.75; font-size:11px;">(${sizeMb} MB)</small>`;
     }
   } catch (err) {
     console.warn("Could not fetch release assets from GitHub API:", err);
-    // Graceful fallback to GitHub Releases page
     if (releaseVersionPill) {
       releaseVersionPill.innerHTML = `<span class="dot"></span> Latest: <strong>GitHub Release</strong> (v0.1.x)`;
     }
@@ -84,11 +101,70 @@ function initInteractiveDemo() {
   const simTextarea = document.getElementById("sim-textarea");
   const toast = document.getElementById("sim-toast");
   const quickPills = document.querySelectorAll(".pick-pill");
+  const omniboxBox = document.getElementById("demo-omnibox-box");
+
+  // Dynamic elements in simulated app
+  const toolTitle = document.getElementById("sim-tool-title");
+  const toolSub = document.getElementById("sim-tool-sub");
+  const btnUpper = document.getElementById("sim-btn-upper");
+  const btnTitle = document.getElementById("sim-btn-title");
+  const btnCopy = document.getElementById("sim-btn-copy");
 
   let isRunning = false;
-  let abortController = null;
 
-  // Bezier curve point interpolation
+  // Preset Configurations
+  const PRESET_CONFIGS = {
+    text: {
+      url: "https://demo.clipwise.app/text-studio",
+      title: "Interactive Text Formatter",
+      sub: "Easily convert any text into uppercase, title case, or lower case in a single click.",
+      btn1: "UPPER CASE",
+      btn2: "Title Case",
+      btn3: "Copy to clipboard",
+      sample: "Clipwise generates stunning product showcases automatically! Try UPPERCASE and Title Case."
+    },
+    analytics: {
+      url: "https://demo.clipwise.app/analytics",
+      title: "SaaS Growth & Revenue Dashboard",
+      sub: "Inspect real-time conversions, daily active metrics, and revenue charts.",
+      btn1: "Quarterly View",
+      btn2: "Export Report",
+      btn3: "Filter Segment",
+      sample: "Monthly Recurring Revenue: $48,250 (+18.4% growth). Active teams: 1,420."
+    },
+    markdown: {
+      url: "https://demo.clipwise.app/markdown",
+      title: "AI Markdown & Documentation Studio",
+      sub: "Instant typography preview with live syntax highlighting and documentation generation.",
+      btn1: "Bold Format",
+      btn2: "Heading H1",
+      btn3: "Render Preview",
+      sample: "# Product Showcase\n\n- Automated browser recording\n- Human mouse curves\n- 1080p MP4 export"
+    },
+    calculator: {
+      url: "https://demo.clipwise.app/calculator",
+      title: "Financial ROI & Mortgage Calculator",
+      sub: "Simulate monthly interest rates, loan terms, and total financial return on investment.",
+      btn1: "Calculate ROI",
+      btn2: "Amortize Schedule",
+      btn3: "Export Breakdown",
+      sample: "Investment Capital: $100,000 | Annual Projected Return: 14.5% | Total 5-Yr Yield: $196,800"
+    }
+  };
+
+  let currentPreset = PRESET_CONFIGS.text;
+
+  function setPreset(key) {
+    currentPreset = PRESET_CONFIGS[key] || PRESET_CONFIGS.text;
+    urlInput.value = currentPreset.url;
+    toolTitle.textContent = currentPreset.title;
+    toolSub.textContent = currentPreset.sub;
+    btnUpper.querySelector("span").textContent = currentPreset.btn1;
+    btnTitle.querySelector("span").textContent = currentPreset.btn2;
+    btnCopy.querySelector("span").textContent = currentPreset.btn3;
+    simTextarea.value = "Click 'Run Simulation' to watch the autonomous Clipwise agent type sample text and interact with tools live.";
+  }
+
   function bezierPoint(p0, p1, p2, p3, t) {
     const cx = 3 * (p1.x - p0.x);
     const bx = 3 * (p2.x - p1.x) - cx;
@@ -108,7 +184,6 @@ function initInteractiveDemo() {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  // Animate cursor along Bezier curve
   async function moveCursorTo(targetX, targetY, durationMs = 800) {
     const startX = parseFloat(cursor.style.left) || 200;
     const startY = parseFloat(cursor.style.top) || 300;
@@ -128,7 +203,6 @@ function initInteractiveDemo() {
     cursor.style.top = `${targetY}px`;
   }
 
-  // Trigger click ripple
   async function clickAt(x, y) {
     cursor.style.transform = "scale(0.82)";
     const ripple = document.createElement("div");
@@ -149,12 +223,11 @@ function initInteractiveDemo() {
     hud.style.transform = "translateY(0)";
   }
 
-  // Type text character by character into simulated textarea
   async function typeTextInto(el, text) {
     el.value = "";
     for (let i = 0; i < text.length; i++) {
       el.value += text[i];
-      await sleep(35 + Math.random() * 40);
+      await sleep(30 + Math.random() * 35);
     }
   }
 
@@ -162,9 +235,9 @@ function initInteractiveDemo() {
     if (isRunning) return;
     isRunning = true;
     runBtn.disabled = true;
-    runBtn.textContent = "Agent Running...";
+    runBtn.innerHTML = `<span>Agent Running...</span>`;
 
-    const targetUrl = urlInput.value || "https://demo.clipwise.app/text-studio";
+    const targetUrl = urlInput.value || currentPreset.url;
     let hostname = "demo.clipwise.app";
     try {
       hostname = new URL(targetUrl).hostname;
@@ -181,11 +254,13 @@ function initInteractiveDemo() {
 
     // Stage 1: Browser Launch & Omnibox typing
     updateHud("Opening Browser", `Navigating to ${hostname}`);
-    await sleep(600);
+    if (omniboxBox) omniboxBox.classList.add("focus-ring");
+    await sleep(700);
+    if (omniboxBox) omniboxBox.classList.remove("focus-ring");
 
     // Stage 2: Discovering features
-    updateHud("Analyzing Site", "Discovered interactive text tools & conversion buttons");
-    await sleep(900);
+    updateHud("Analyzing Site", "Discovered interactive tools & conversion buttons");
+    await sleep(800);
 
     // Stage 3: Move cursor to simulated textarea
     const stageRect = stage.getBoundingClientRect();
@@ -193,54 +268,50 @@ function initInteractiveDemo() {
     const areaX = areaRect.left - stageRect.left + 80;
     const areaY = areaRect.top - stageRect.top + 50;
 
-    updateHud("Text Studio", "Typing realistic input to test live tool transformation");
-    await moveCursorTo(areaX, areaY, 900);
+    updateHud(currentPreset.title, "Typing realistic input to test live tool transformation");
+    await moveCursorTo(areaX, areaY, 850);
     await clickAt(areaX, areaY);
     simTextarea.focus();
 
-    const sampleText = "Clipwise generates stunning product showcases automatically! Try UPPERCASE and Title Case.";
-    await typeTextInto(simTextarea, sampleText);
+    await typeTextInto(simTextarea, currentPreset.sample);
     await sleep(1000);
 
-    // Stage 4: Move to UPPER CASE button
-    const btnUpper = document.getElementById("sim-btn-upper");
+    // Stage 4: Move to Button 1
     const upperRect = btnUpper.getBoundingClientRect();
     const upperX = upperRect.left - stageRect.left + upperRect.width / 2;
     const upperY = upperRect.top - stageRect.top + upperRect.height / 2;
 
-    updateHud("Text Studio", 'Triggering tool action: "UPPER CASE"');
-    await moveCursorTo(upperX, upperY, 800);
+    updateHud(currentPreset.title, `Triggering tool action: "${currentPreset.btn1}"`);
+    await moveCursorTo(upperX, upperY, 750);
     await clickAt(upperX, upperY);
     btnUpper.classList.add("active");
 
     // Text mutation on screen
     simTextarea.value = simTextarea.value.toUpperCase();
-    await sleep(1600);
+    await sleep(1500);
     btnUpper.classList.remove("active");
 
-    // Stage 5: Move to Title Case button
-    const btnTitle = document.getElementById("sim-btn-title");
+    // Stage 5: Move to Button 2
     const titleRect = btnTitle.getBoundingClientRect();
     const titleX = titleRect.left - stageRect.left + titleRect.width / 2;
     const titleY = titleRect.top - stageRect.top + titleRect.height / 2;
 
-    updateHud("Text Studio", 'Triggering tool action: "Title Case"');
+    updateHud(currentPreset.title, `Triggering tool action: "${currentPreset.btn2}"`);
     await moveCursorTo(titleX, titleY, 700);
     await clickAt(titleX, titleY);
     btnTitle.classList.add("active");
 
     // Title case mutation
     simTextarea.value = simTextarea.value.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
-    await sleep(1600);
+    await sleep(1500);
     btnTitle.classList.remove("active");
 
-    // Stage 6: Copy to Clipboard
-    const btnCopy = document.getElementById("sim-btn-copy");
+    // Stage 6: Copy / Trigger action 3
     const copyRect = btnCopy.getBoundingClientRect();
     const copyX = copyRect.left - stageRect.left + copyRect.width / 2;
     const copyY = copyRect.top - stageRect.top + copyRect.height / 2;
 
-    updateHud("Text Studio", 'Triggering tool action: "Copy to clipboard"');
+    updateHud(currentPreset.title, `Triggering tool action: "${currentPreset.btn3}"`);
     await moveCursorTo(copyX, copyY, 650);
     await clickAt(copyX, copyY);
     toast.classList.add("show");
@@ -249,22 +320,22 @@ function initInteractiveDemo() {
 
     // Stage 7: Showcase Complete
     updateHud("Showcase Complete", `${hostname} • Exporting 1080p MP4 (54.6s)`);
-    await sleep(2200);
+    await sleep(2000);
 
     isRunning = false;
     runBtn.disabled = false;
-    runBtn.innerHTML = `<span>▶</span> Run Simulation`;
+    runBtn.innerHTML = `${PLAY_SVG} <span>Run Simulation</span>`;
   }
 
   function resetSimulation() {
     isRunning = false;
     runBtn.disabled = false;
-    runBtn.innerHTML = `<span>▶</span> Run Simulation`;
+    runBtn.innerHTML = `${PLAY_SVG} <span>Run Simulation</span>`;
     simTextarea.value = "Click 'Run Simulation' to watch the autonomous Clipwise agent type sample text and interact with tools live.";
     cursor.style.left = "420px";
     cursor.style.top = "360px";
     toast.classList.remove("show");
-    updateHud("Agent Ready", "Choose a website or click Run Simulation");
+    updateHud("Agent Ready", "Choose a preset or click Run Simulation");
   }
 
   runBtn.addEventListener("click", runSimulation);
@@ -274,12 +345,36 @@ function initInteractiveDemo() {
     pill.addEventListener("click", () => {
       quickPills.forEach(p => p.classList.remove("active"));
       pill.classList.add("active");
-      urlInput.value = pill.dataset.url;
+      const type = pill.dataset.type || "text";
+      setPreset(type);
       resetSimulation();
       runSimulation();
     });
   });
 
-  // Set default initial textarea text
+  setPreset("text");
   resetSimulation();
+}
+
+// 3. Scroll Reveal Animation Observer
+function initScrollReveal() {
+  const reveals = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window)) {
+    reveals.forEach(el => el.classList.add("active"));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+        obs.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.12,
+    rootMargin: "0px 0px -40px 0px"
+  });
+
+  reveals.forEach(el => observer.observe(el));
 }
