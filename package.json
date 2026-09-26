@@ -1,0 +1,21 @@
+{
+  "name": "clipwise",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["apps/desktop", "packages/shared", "services/browser"],
+  "scripts": {
+    "dev": "node scripts/desktop-dev.mjs",
+    "dev:browser": "node services/browser/src/server.js",
+    "dev:web": "npm --workspace apps/desktop run dev",
+    "build": "npm run build:shared && npm run build:browser && npm --workspace apps/desktop run build",
+    "build:shared": "npm --workspace packages/shared run build",
+    "build:browser": "npm --workspace services/browser run build",
+    "test": "npm --workspace services/browser test && npm --workspace packages/shared test",
+    "lint": "npm --workspace apps/desktop run lint",
+    "tauri:dev": "npm --workspace apps/desktop run tauri:dev",
+    "tauri:build": "npm --workspace apps/desktop run tauri:build"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

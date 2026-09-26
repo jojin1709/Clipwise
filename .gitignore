@@ -1,0 +1,10 @@
+node_modules/
+dist/
+target/
+.vite/
+.env
+*.log
+projects/
+services/browser/.cache/
+services/browser/runs/
+apps/desktop/src-tauri/gen/

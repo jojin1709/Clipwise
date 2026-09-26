@@ -1,0 +1,17 @@
+{
+  "name": "@clipwise/browser",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node src/server.js",
+    "build": "tsc",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@clipwise/shared": "0.1.0",
+    "playwright": "^1.55.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
