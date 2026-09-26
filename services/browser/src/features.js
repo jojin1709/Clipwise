@@ -15,7 +15,7 @@ export function discoverFeatures(result) {
 
   const pages = result.pages || [];
 
-  // 1. Generate a dedicated Tour Section for every explored page
+  // 1. Generate an interactive Tour Section for every explored page
   pages.forEach((page, idx) => {
     const title = cleanTitle(page.title, page.url);
     const slug = new URL(page.url).pathname.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "") || "home";
@@ -26,16 +26,18 @@ export function discoverFeatures(result) {
       {
         action: "banner",
         title: title,
-        subtitle: isHome ? "Main Overview & Highlights" : (headingsList || "Explore Tools & Features")
+        subtitle: isHome ? "Main Overview & Live Demonstration" : (headingsList || "Interactive Hands-On Demonstration")
       },
       { action: "goto", url: page.url },
-      { action: "wait", ms: 3000 },
-      { action: "smoothScroll", amount: 650, duration: 2800 },
-      { action: "wait", ms: 2200 },
-      { action: "smoothScroll", amount: 800, duration: 3200 },
-      { action: "wait", ms: 2500 },
-      { action: "smoothScroll", amount: -500, duration: 2500 },
-      { action: "wait", ms: 1800 }
+      {
+        action: "handsOnDemo",
+        title: title,
+        url: page.url,
+        isHome,
+        headings: page.headings || [],
+        buttons: page.buttons || [],
+        inputs: page.inputs || []
+      }
     ];
 
     add({
@@ -54,7 +56,7 @@ export function discoverFeatures(result) {
     });
   });
 
-  // 2. Search Capability Discovery
+  // 2. Search & Discovery Feature (if search controls are detected on any page)
   for (const page of pages) {
     const text = `${page.title} ${(page.headings || []).join(" ")} ${(page.buttons || []).join(" ")}`.toLowerCase();
     const hasSearchInput = (page.inputs || []).some(i =>
@@ -73,9 +75,15 @@ export function discoverFeatures(result) {
         workflow: [
           { action: "banner", title: "Search & Discovery", subtitle: "Instant catalog and tool lookup" },
           { action: "goto", url: page.url },
-          { action: "wait", ms: 2500 },
-          { action: "smoothScroll", amount: 400, duration: 2000 },
-          { action: "wait", ms: 2000 }
+          {
+            action: "handsOnDemo",
+            title: "Search & Discovery",
+            url: page.url,
+            isHome: false,
+            headings: page.headings || [],
+            buttons: page.buttons || [],
+            inputs: page.inputs || []
+          }
         ]
       });
       break;
@@ -93,13 +101,9 @@ export function discoverFeatures(result) {
       sourcePage: result.startUrl,
       evidence: ["Primary entrypoint."],
       workflow: [
-        { action: "banner", title: "Product Overview", subtitle: "Welcome Tour" },
+        { action: "banner", title: "Product Overview", subtitle: "Welcome Tour & Interactive Demo" },
         { action: "goto", url: result.startUrl },
-        { action: "wait", ms: 3000 },
-        { action: "smoothScroll", amount: 700, duration: 3000 },
-        { action: "wait", ms: 2500 },
-        { action: "smoothScroll", amount: 900, duration: 3500 },
-        { action: "wait", ms: 2500 }
+        { action: "handsOnDemo", title: "Product Overview", url: result.startUrl, isHome: true }
       ]
     });
   }
